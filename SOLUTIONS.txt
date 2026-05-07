@@ -1,0 +1,1762 @@
+Generalized N-Queens Solutions (C coins per line)
+===============================================
+
+Solution for (1, 1) [Time: 3ms]:
+o
+
+Solution for (2, 2) [Time: 0ms]:
+o o
+o o
+
+Solution for (3, 2) [Time: 0ms]:
+. o o
+o . o
+o o .
+
+Solution for (3, 3) [Time: 0ms]:
+o o o
+o o o
+o o o
+
+Solution for (4, 1) [Time: 1ms]:
+. . o .
+o . . .
+. . . o
+. o . .
+
+Solution for (4, 2) [Time: 0ms]:
+. o . o
+o o . .
+. . o o
+o . o .
+
+Solution for (4, 3) [Time: 0ms]:
+. o o o
+o o . o
+o . o o
+o o o .
+
+Solution for (4, 4) [Time: 0ms]:
+o o o o
+o o o o
+o o o o
+o o o o
+
+Solution for (5, 1) [Time: 0ms]:
+. o . . .
+. . . o .
+o . . . .
+. . o . .
+. . . . o
+
+Solution for (5, 2) [Time: 0ms]:
+. o . o .
+o . . . o
+. . o . o
+o o . . .
+. . o o .
+
+Solution for (5, 3) [Time: 1ms]:
+o . . o o
+o o o . .
+. o . o o
+. . o o o
+o o o . .
+
+Solution for (5, 4) [Time: 0ms]:
+o o o . o
+. o o o o
+o o . o o
+o o o o .
+o . o o o
+
+Solution for (5, 5) [Time: 0ms]:
+o o o o o
+o o o o o
+o o o o o
+o o o o o
+o o o o o
+
+Solution for (6, 1) [Time: 3ms]:
+. . o . . .
+. . . . . o
+. o . . . .
+. . . . o .
+o . . . . .
+. . . o . .
+
+Solution for (6, 2) [Time: 0ms]:
+. o . o . .
+. o . . . o
+o . o . . .
+. . . . o o
+. . o o . .
+o . . . o .
+
+Solution for (6, 3) [Time: 0ms]:
+. . . o o o
+o o o . . .
+o . . . o o
+. o o o . .
+o . . . o o
+. o o o . .
+
+Solution for (6, 4) [Time: 1ms]:
+o . o o . o
+o o o . o .
+o o . o . o
+o o . . o o
+. . o o o o
+. o o o o .
+
+Solution for (6, 5) [Time: 1ms]:
+. o o o o o
+o o o o . o
+o o o o o .
+o o . o o o
+o o o . o o
+o . o o o o
+
+Solution for (6, 6) [Time: 0ms]:
+o o o o o o
+o o o o o o
+o o o o o o
+o o o o o o
+o o o o o o
+o o o o o o
+
+Solution for (7, 1) [Time: 0ms]:
+. o . . . . .
+. . . . . o .
+. . o . . . .
+. . . . . . o
+. . . o . . .
+o . . . . . .
+. . . . o . .
+
+Solution for (7, 2) [Time: 0ms]:
+. . . . . o o
+. . o o . . .
+o . . . . o .
+. o . o . . .
+. . . . o . o
+o . . . o . .
+. o o . . . .
+
+Solution for (7, 3) [Time: 0ms]:
+. . . o . o o
+o o . o . . .
+. o . . . o o
+o . . o o . .
+. o o . o . .
+o . o . . . o
+. . o . o o .
+
+Solution for (7, 4) [Time: 1ms]:
+. . o o o o .
+o . o . o . o
+o o . . o . o
+o o . o . o .
+. . . o o o o
+o o o . . . o
+. o o o . o .
+
+Solution for (7, 5) [Time: 0ms]:
+. o o o o o .
+. . o o o o o
+o o o o . . o
+o o . o . o o
+o o . o o . o
+o . o . o o o
+o o o . o o .
+
+Solution for (7, 6) [Time: 0ms]:
+o o o o o o .
+o o o . o o o
+o o o o o . o
+. o o o o o o
+o o o o . o o
+o o . o o o o
+o . o o o o o
+
+Solution for (7, 7) [Time: 0ms]:
+o o o o o o o
+o o o o o o o
+o o o o o o o
+o o o o o o o
+o o o o o o o
+o o o o o o o
+o o o o o o o
+
+Solution for (8, 1) [Time: 40ms]:
+. . . . . . o .
+. . . o . . . .
+. o . . . . . .
+. . . . . . . o
+. . . . . o . .
+o . . . . . . .
+. . o . . . . .
+. . . . o . . .
+
+Solution for (8, 2) [Time: 1ms]:
+o . . . . o . .
+. . o o . . . .
+o . . . . . . o
+. o . . o . . .
+. . . . . . o o
+. o . . . o . .
+. . o o . . . .
+. . . . o . o .
+
+Solution for (8, 3) [Time: 1ms]:
+. o . o o . . .
+o . . . . o . o
+. . o . . o o .
+. o o o . . . .
+. o . . o . . o
+o . o . . . o .
+o . . . o . . o
+. . . o . o o .
+
+Solution for (8, 4) [Time: 0ms]:
+. o o . . o o .
+o o o . . . . o
+. . . . o o o o
+. o o o . o . .
+o o . . . . o o
+. . o o o . o .
+o . . o o o . .
+o . . o o . . o
+
+Solution for (8, 5) [Time: 0ms]:
+o . o o o . o .
+o o o . o . . o
+. o o o o . o .
+o . . . o o o o
+. o . o . o o o
+o o . o . o . o
+. o o o . o . o
+o . o . o o o .
+
+Solution for (8, 6) [Time: 0ms]:
+. o o o o . o o
+o o o o . o o .
+o o o . o o o .
+o o o . . o o o
+o . . o o o o o
+. o . o o o o o
+o o o o o . . o
+o . o o o o . o
+
+Solution for (8, 7) [Time: 0ms]:
+o o o o o o o .
+o . o o o o o o
+o o . o o o o o
+o o o o o . o o
+o o o o o o . o
+o o o . o o o o
+. o o o o o o o
+o o o o . o o o
+
+Solution for (8, 8) [Time: 0ms]:
+o o o o o o o o
+o o o o o o o o
+o o o o o o o o
+o o o o o o o o
+o o o o o o o o
+o o o o o o o o
+o o o o o o o o
+o o o o o o o o
+
+Solution for (9, 1) [Time: 0ms]:
+. . . . . o . . .
+. . . . . . . o .
+. . o . . . . . .
+. . . . . . o . .
+. . . . . . . . o
+. o . . . . . . .
+. . . . o . . . .
+o . . . . . . . .
+. . . o . . . . .
+
+Solution for (9, 2) [Time: 0ms]:
+. o . . . . . o .
+. . . . o o . . .
+o . o . . . . . .
+. . o . . . . . o
+. . . . o . o . .
+. . . . . . o . o
+o . . o . . . . .
+. . . o . o . . .
+. o . . . . . o .
+
+Solution for (9, 3) [Time: 0ms]:
+o . . o . o . . .
+. . . . . o . o o
+. . o o . . . . o
+o . . . o . o . .
+. . o . o . o . .
+o o . . . . . o .
+. o . . . o . . o
+. o . . o . o . .
+. . o o . . . o .
+
+Solution for (9, 4) [Time: 1ms]:
+. . o o o . . o .
+o o . . . o o . .
+o . o o . . . . o
+. o . . . o o . o
+. o . . o . . o o
+o o . o o . . . .
+. . o . . . o o o
+o . . o . o o . .
+. . o . o o . o .
+
+Solution for (9, 5) [Time: 0ms]:
+o . o o . . . o o
+o . o . . o . o o
+o . . o o o o . .
+o o . . . o o . o
+. o o o . . . o o
+. o . . o o o . o
+o o . o o . o . .
+. o o . o . o o .
+. . o o o o . o .
+
+Solution for (9, 6) [Time: 0ms]:
+o . o o o o . . o
+o . o o . o o o .
+o o . o o o . . o
+. o o . o . o o o
+o o o . o o o . .
+o o o o . . . o o
+o o . o . o o o .
+. o o . o . o o o
+. . . o o o o o o
+
+Solution for (9, 7) [Time: 0ms]:
+o o o . . o o o o
+o o o o o o o . .
+o . o o . o o o o
+o o . o o o o . o
+o . o o o o . o o
+o o o . o . o o o
+o o o o o . . o o
+. o o o o o o o .
+. o . o o o o o o
+
+Solution for (9, 8) [Time: 1ms]:
+o o o o o o o o .
+o . o o o o o o o
+o o o o o o . o o
+o o o o . o o o o
+o o o . o o o o o
+o o o o o . o o o
+o o o o o o o . o
+. o o o o o o o o
+o o . o o o o o o
+
+Solution for (9, 9) [Time: 0ms]:
+o o o o o o o o o
+o o o o o o o o o
+o o o o o o o o o
+o o o o o o o o o
+o o o o o o o o o
+o o o o o o o o o
+o o o o o o o o o
+o o o o o o o o o
+o o o o o o o o o
+
+Solution for (10, 1) [Time: 3ms]:
+. . . o . . . . . .
+. . . . . . . o . .
+. . o . . . . . . .
+. . . . . . . . o .
+. . . . . o . . . .
+. . . . . . . . . o
+o . . . . . . . . .
+. . . . . . o . . .
+. . . . o . . . . .
+. o . . . . . . . .
+
+Solution for (10, 2) [Time: 1ms]:
+. . . . . o . o . .
+. . o o . . . . . .
+. . . . . . . . o o
+. . . o . . o . . .
+o . . . . . . . o .
+. . o . o . . . . .
+o . . . . . . . . o
+. o . . o . . . . .
+. . . . . . o o . .
+. o . . . o . . . .
+
+Solution for (10, 3) [Time: 0ms]:
+. . o . . . . o . o
+. . . o . o o . . .
+. o o . . . o . . .
+o . . . o . . . . o
+. . . . o . . o . o
+. o . . . o . . o .
+o . . . . . . o o .
+. o . o o . . . . .
+. . o o . . o . . .
+o . . . . o . . o .
+
+Solution for (10, 4) [Time: 0ms]:
+o . o . . o o . . .
+. . . o . . o o . o
+. o . . o o . . o .
+. o o o . . . . . o
+. o o . . o . o . .
+o . . . o . o . o .
+. . o o . . . . o o
+o . . o o . . . o .
+o o . . o . . o . .
+. . . . . o o o . o
+
+Solution for (10, 5) [Time: 1ms]:
+. o . o o o . o . .
+o . . o o o o . . .
+. . o o . . o . o o
+o o . . . . o o . o
+. o o o . o . . . o
+o o o . o o . . . .
+o . o . o . . o o .
+. . o . . . o o o o
+. . . o o o o . o .
+o o . . . . . o o o
+
+Solution for (10, 6) [Time: 0ms]:
+o . . o o . o o o .
+o o . . o o o . . o
+o . o o . . o o . o
+. . o . o o o o o .
+o o o o . o . . . o
+. o o o . . o . o o
+o o o . o . . . o o
+. o o o o o . o . .
+. o . o o o . o o .
+o . . . . o o o o o
+
+Solution for (10, 7) [Time: 0ms]:
+o . . o o . o o o o
+. . o o o o o . o o
+. o o o . o . o o o
+o o o o . o o o . .
+o o o o o . o o . .
+o . o o . . o o o o
+o o . . o o . o o o
+o o o . o o . . o o
+. o . o o o o o o .
+o o o . o o o . . o
+
+Solution for (10, 8) [Time: 0ms]:
+o o o o . o o o o .
+o . o o o o o o . o
+o o o . o o o . o o
+. o o . o o o o o o
+o o o o o . . o o o
+. o o o . o o o o o
+o o . o o o o o . o
+o o o o o . o . o o
+o . o o o o o o o .
+o o . o o o . o o o
+
+Solution for (10, 9) [Time: 0ms]:
+o o . o o o o o o o
+o . o o o o o o o o
+o o o o o o o . o o
+o o o o o . o o o o
+o o o o o o o o . o
+o o o o o o o o o .
+o o o o . o o o o o
+o o o o o o . o o o
+. o o o o o o o o o
+o o o . o o o o o o
+
+Solution for (10, 10) [Time: 0ms]:
+o o o o o o o o o o
+o o o o o o o o o o
+o o o o o o o o o o
+o o o o o o o o o o
+o o o o o o o o o o
+o o o o o o o o o o
+o o o o o o o o o o
+o o o o o o o o o o
+o o o o o o o o o o
+o o o o o o o o o o
+
+Solution for (11, 1) [Time: 4ms]:
+. . . . . . . o . . .
+. . . o . . . . . . .
+o . . . . . . . . . .
+. . . . . . o . . . .
+. . . . . . . . . o .
+. o . . . . . . . . .
+. . . . . . . . . . o
+. . . . o . . . . . .
+. . o . . . . . . . .
+. . . . . . . . o . .
+. . . . . o . . . . .
+
+Solution for (11, 2) [Time: 8ms]:
+. . . o . . . . . o .
+. . . . . o . . . . o
+o . . . o . . . . . .
+. . o . . o . . . . .
+. . . . . . . . o . o
+o . . . . . . . o . .
+. o . . . . o . . . .
+. . . o . . o . . . .
+. o . . . . . . . o .
+. . o . . . . o . . .
+. . . . o . . o . . .
+
+Solution for (11, 3) [Time: 1ms]:
+. . . o o o . . . . .
+. . . . o . . . . o o
+. . o . . . . o o . .
+. o . o . o . . . . .
+. o . . . . . . . o o
+. . o . . . . o . o .
+o . . . o . o . . . .
+o . . . . . . . o . o
+. . . . . o o o . . .
+o . o . . . . . o . .
+. o . o . . o . . . .
+
+Solution for (11, 4) [Time: 0ms]:
+o . . . o o o . . . .
+. . o . . . . . o o o
+o . o . . o o . . . .
+. . . o . o o . . o .
+o o . o . . . . o . .
+. . o o . . . . o . o
+. o . . o o . o . . .
+. o . . . . . o . o o
+. . . o o . . o . o .
+. . . . o . . o o . o
+o o o . . . o . . . .
+
+Solution for (11, 5) [Time: 1ms]:
+. . o . o o o o . . .
+. o o . o o . . . o .
+o . . o . . o . o o .
+. o . o . . o . . o o
+o o . . . . o o . . o
+o . . o . o . o o . .
+o o o . . o . . . . o
+. . o . . . o . o o o
+o . . o o . . o o . .
+. o o . o o . o . . .
+. . . o o . . . o o o
+
+Solution for (11, 6) [Time: 0ms]:
+. o o o o . . o o . .
+. o o o . o . . o o .
+. o o o . o . o . o .
+o o . . . . o o . o o
+o o . o o . . . o o .
+. . . . o . o o o o o
+. o o . o o o . . . o
+o . o . . o o . . o o
+o . . o o . o . o . o
+o . o . o o . o . . o
+o . . o . o o o o . .
+
+Solution for (11, 7) [Time: 1ms]:
+o o o . o o o . . o .
+. o . o o o . o o o .
+o o . o o . o . o . o
+. . o o o o . o o . o
+o . o . . . o o o o o
+o o . . o . o o . o o
+o . o . . o o o . o o
+o o o o . o . . o . o
+. o o o o . o o . o .
+. . o o . o o o o o .
+o o . o o o . . o . o
+
+Solution for (11, 8) [Time: 0ms]:
+. . o o o o o o o . o
+o . o . o o o o o . o
+. o o o o o . o . o o
+o . o o o o o o . o .
+o o . o o . o . o o o
+o o . . . o o o o o o
+o o . o o o . . o o o
+o o o o . o o o . o .
+o o o o . o . . o o o
+o o o . o . o o o . o
+. o o o o . o o o o .
+
+Solution for (11, 9) [Time: 1ms]:
+o o o o o o . o o o .
+. o o o o o o o o . o
+o o . o o o o o . o o
+o o . o o o . o o o o
+o o o o . . o o o o o
+o o o o o . o o o . o
+o . o o o o o . o o o
+. o o o o o o o o o .
+o . o . o o o o o o o
+o o o . . o o o o o o
+o o o o o o o . . o o
+
+Solution for (11, 10) [Time: 0ms]:
+o o o o o o o o . o o
+o o . o o o o o o o o
+o o o . o o o o o o o
+o o o o o . o o o o o
+o o o o o o o o o . o
+o o o o o o . o o o o
+o o o o . o o o o o o
+o o o o o o o . o o o
+. o o o o o o o o o o
+o . o o o o o o o o o
+o o o o o o o o o o .
+
+Solution for (11, 11) [Time: 0ms]:
+o o o o o o o o o o o
+o o o o o o o o o o o
+o o o o o o o o o o o
+o o o o o o o o o o o
+o o o o o o o o o o o
+o o o o o o o o o o o
+o o o o o o o o o o o
+o o o o o o o o o o o
+o o o o o o o o o o o
+o o o o o o o o o o o
+o o o o o o o o o o o
+
+Solution for (12, 1) [Time: 5ms]:
+. o . . . . . . . . . .
+. . . . . . . . . . o .
+. . . . o . . . . . . .
+. . . . . . . o . . . .
+o . . . . . . . . . . .
+. . o . . . . . . . . .
+. . . . . . . . . . . o
+. . . . . . o . . . . .
+. . . . . . . . o . . .
+. . . o . . . . . . . .
+. . . . . o . . . . . .
+. . . . . . . . . o . .
+
+Solution for (12, 2) [Time: 1ms]:
+. . . o . . . . . . o .
+. . . o . . . . . . o .
+. . . . . o o . . . . .
+o . o . . . . . . . . .
+. . . . . . . . o . . o
+. . . . . o . . . . . o
+o o . . . . . . . . . .
+. o . . . . o . . . . .
+. . . . o . . . . o . .
+. . o . o . . . . . . .
+. . . . . . . o o . . .
+. . . . . . . o . o . .
+
+Solution for (12, 3) [Time: 1ms]:
+. . o . . o o . . . . .
+. . . o . o . . o . . .
+o . . o . . o . . . . .
+. . . . . . o . . o o .
+. . . o o . . . . . . o
+o . . . . . . . o . o .
+. o . . o . . . . . . o
+. . . . . . . o . . o o
+. o o . . . . . . o . .
+. . o . . . . o . o . .
+. o . . o o . . . . . .
+o . . . . . . o o . . .
+
+Solution for (12, 4) [Time: 0ms]:
+. . o . o o . o . . . .
+. . . . . . o o . o . o
+. . o o o . . . o . . .
+. . . o . . o . . . o o
+. o o . o . . o . . . .
+o . . . . o . . o . o .
+. o o . . o . . . o . .
+o . . o . o . . . . . o
+o o . . . . o . . o . .
+. . . . . . o . o . o o
+. o . o o . . o . . . .
+o . . . . . . . o o o .
+
+Solution for (12, 5) [Time: 1ms]:
+. . . o . . o o . o o .
+. o . . . o . . o o . o
+o . . . . . o . o o . o
+o o o . . o . o . . . .
+o o o . . . . o . . o .
+. o o o o o . . . . . .
+. o . . . . o . o o o .
+o . o . o . o . . . o .
+o . . . o o . o o . . .
+. . o o o . . . . . o o
+. . . o . . o . o o . o
+. . . o o o . o . . . o
+
+Solution for (12, 6) [Time: 1ms]:
+. o . . . o o . o o o .
+o o . o . o . . . o . o
+o o . o . . o o . . o .
+o . o . . . o o o . o .
+o o o o o o . . . . . .
+. . . . o . o o . o o o
+. . o o . . o . . o o o
+o o . . o . . o o o . .
+. . o . . o o . o . o o
+. o o o o o . o . . . .
+o . . o o . . . o o . o
+. . o . o o . o o . . o
+
+Solution for (12, 7) [Time: 0ms]:
+o o o o . o o . . . o .
+o o o . o o . . o o . .
+o o . o . o o o . . o .
+o o . o o o . . . . o o
+o . o . . . o . o o o o
+. . o . o o . . o o o o
+. o . o . . . o o o o o
+. . . . o o o o . o o o
+. . o o o . o o o . . o
+o . o . o . o o o . . o
+o o o o . . o o . o . .
+. o . o o o . o o o . .
+
+Solution for (12, 8) [Time: 0ms]:
+. o o . o . o . o o o o
+o . o . o o o o o . . o
+o . o o . o . . o o o o
+. . . o o o o o . o o o
+. o o o . o o o o o . .
+o o . o o . . o o . o o
+o o o o . . o . o . o o
+o o o o o o . o . . o .
+o o o o . . o . o o . o
+. . o . o o o o . o o o
+o o . o o o . o o o . .
+o o . . o o o o . o o .
+
+Solution for (12, 9) [Time: 1ms]:
+o o o o o . o o . . o o
+o o . o o o o . o o o .
+o . . o o o o o o o . o
+. o o o o o o . . o o o
+o o o . . o o o . o o o
+o o . . o o . o o o o o
+o . o o o o . o o o o .
+o o o o . o o . o o . o
+o o o . o . o o o . o o
+. o o o o o o o o o . .
+. o o o . o o o o . o o
+o . o o o . . o o o o o
+
+Solution for (12, 10) [Time: 0ms]:
+o o o o . o o o . o o o
+o . o o o o o o o o . o
+o o . o o o o o . o o o
+. o o o o . o o o o o o
+. o o o o o o o o o o .
+o o o . o o . o o o o o
+o o . o o o o . o o o o
+o o o o o . o . o o o o
+o o o o o o o o o . o .
+o o o o o o . o o . o o
+o o o . . o o o o o o o
+o . o o o o o o o o . o
+
+Solution for (12, 11) [Time: 0ms]:
+o o o . o o o o o o o o
+o o . o o o o o o o o o
+o o o o o o o o o o o .
+o o o o o o o o o o . o
+o o o o . o o o o o o o
+o o o o o o o o . o o o
+o o o o o o . o o o o o
+o o o o o . o o o o o o
+o o o o o o o . o o o o
+o . o o o o o o o o o o
+o o o o o o o o o . o o
+. o o o o o o o o o o o
+
+Solution for (12, 12) [Time: 0ms]:
+o o o o o o o o o o o o
+o o o o o o o o o o o o
+o o o o o o o o o o o o
+o o o o o o o o o o o o
+o o o o o o o o o o o o
+o o o o o o o o o o o o
+o o o o o o o o o o o o
+o o o o o o o o o o o o
+o o o o o o o o o o o o
+o o o o o o o o o o o o
+o o o o o o o o o o o o
+o o o o o o o o o o o o
+
+Solution for (13, 1) [Time: 1ms]:
+. . o . . . . . . . . . .
+. . . . . . . . . . o . .
+. o . . . . . . . . . . .
+. . . . . . . . . o . . .
+. . . . o . . . . . . . .
+. . . . . . . . o . . . .
+. . . . . . . . . . . o .
+o . . . . . . . . . . . .
+. . . . . . . . . . . . o
+. . . . . . . o . . . . .
+. . . . . o . . . . . . .
+. . . o . . . . . . . . .
+. . . . . . o . . . . . .
+
+Solution for (13, 2) [Time: 1ms]:
+. . . . . . o . . . . o .
+. . . . . . . . . . o . o
+. o . . . . . o . . . . .
+. . o . o . . . . . . . .
+. . . . . . . . o o . . .
+. . . . . o . . . . . . o
+. . o . . . . . . . o . .
+. . . o . . . o . . . . .
+o . . . . . . . . o . . .
+o . . . . . . . . . . o .
+. . . . o o . . . . . . .
+. o . . . . . . o . . . .
+. . . o . . o . . . . . .
+
+Solution for (13, 3) [Time: 1ms]:
+. . . . . o . . . o . . o
+. . . o . . . . o . . o .
+o o . . . . . . . . . o .
+. . o . . . . . o . . . o
+. . o o . . o . . . . . .
+. o . . . . . . . . o . o
+. . . . . . o o . o . . .
+o . . o . . . o . . . . .
+. . o . . . o . . . . o .
+o . . . o . . . . . o . .
+. o . . o . . . . . o . .
+. . . . . o . o o . . . .
+. . . . o o . . . o . . .
+
+Solution for (13, 4) [Time: 3ms]:
+. . . o . . . o . . o o .
+o . . . o o . . . . . o .
+o . . o . . o . o . . . .
+o . o . . . . . . . . o o
+. . . o . . o . o o . . .
+. o o . . . o . . . . . o
+. o o o . . . . . . . o .
+. . . . . o . o o o . . .
+. . o . . . . . o o o . .
+. . . . o o . o . . . . o
+. o . . o o . . . . o . .
+o o . . . . . o . . o . .
+. . . . o . o . . o . . o
+
+Solution for (13, 5) [Time: 1ms]:
+. . . . o o o . o . o . .
+. . . o o . o . . o . . o
+o o . o . . o . . o . . .
+o . o . . . . . . o . o o
+. o . o . o . o . . . o .
+. . . . . . . o o o . o o
+o . o o . o o . . . . . .
+. o o . . . . . o . o o .
+o . o . . . . . o . o o .
+o o . . . o o o . . . . .
+. o . o o . . o . . . . o
+. . . . o . . o . o o . o
+. . o . o o . . o . o . .
+
+Solution for (13, 6) [Time: 0ms]:
+. o . . . . . o o o . o o
+o o o . o . . . . o o . .
+. . . . o o o o o . . o .
+o o o o . o . . . o . . .
+o o . . . . o o . o o . .
+. . . o o o o . . o o . .
+. o o o . . . . o . o . o
+. . o . o . . o . o . o o
+o . . . . o . . o . o o o
+o . . o o . . o . . o . o
+. . . o o o o . o . . o .
+o o o . . . o . . . . o o
+. . o o . o o o o . . . .
+
+Solution for (13, 7) [Time: 1ms]:
+. . o o o o . o . . o o .
+o . o o o . . o . o . o .
+. . o o . o o o o . . o .
+. . . o o . o . o o o . o
+. o o . . . . o o . o o o
+o o . . o o o . . o . o .
+o o . . . o . . o . o o o
+. o . o o o o . . o o . .
+o o . . . . . o o o o . o
+o . . o o . o . o . o . o
+o . o o . o o o . . . . o
+o o o . . . o o . o . . o
+. o o . o o . . o o . o .
+
+Solution for (13, 8) [Time: 0ms]:
+o . . . . o o . o o o o o
+. . o o . o o o o o . . o
+o o o . o o . . . o o o .
+. o o o o . . o o . . o o
+. o o o o o . o o . . o .
+o . o . o . o o . o o . o
+o . . o o . o o . o o . o
+. o . o . . o o o o o o .
+o o . o o o . . . . o o o
+o o o o o . . o o . o . .
+o o . . . o o o . o . o o
+. . o o o o o . o o . o .
+o o o . . o o . o . o . o
+
+Solution for (13, 9) [Time: 1ms]:
+o . . o o . o o o o o o .
+o o o o o o o . o . . o .
+o . . o o o o o . o o . o
+. o o . o o o o o o . . o
+o . o o . . o . o o o o o
+o o o o . o o . o . o o .
+o o o o o . . o o o . . o
+o o o o . o . o o . o . o
+. o o . . o . o o o o o o
+. o . . o o o o . o o o o
+. o o o o . o . . o o o o
+o . o . o o o o o . o o .
+o o . o o o . o . o . o o
+
+Solution for (13, 10) [Time: 0ms]:
+o o o . o . . o o o o o o
+o . o o o o o . o o o o .
+o o o o o o . . o o o . o
+. o o o . o o o o . o o o
+o o o o o . o . o o o . o
+o o . o . o o o o o . o o
+. o o o . o o o . o o o o
+o . o . o . o o o o o o o
+o o . o o o . o o o . o o
+o o o o o o o o . . o . o
+o o o . o o o o o o . o .
+. . o o o o o o o o o o .
+o o . o o o o o . . o o o
+
+Solution for (13, 11) [Time: 1ms]:
+o o o o o o o . o . o o o
+o . o o o o o o . o o o o
+. o o o o o o o o o . o o
+o o o o o . o o o o o o .
+o o o o . o o o o o o . o
+o o o o o o . o o o o o .
+o o o . o o o o o o . o o
+o o o . . o o o o o o o o
+o o o o o . . o o o o o o
+o o o o o o o . o . o o o
+o . . o o o o o o o o o o
+. o o o o o o o . o o o o
+o o . o o o o o o o o . o
+
+Solution for (13, 12) [Time: 0ms]:
+. o o o o o o o o o o o o
+o o o o o o . o o o o o o
+o o o . o o o o o o o o o
+o o o o o o o o o o o o .
+o o o o o o o . o o o o o
+o o o o o o o o o . o o o
+o o o o . o o o o o o o o
+o o o o o o o o o o . o o
+o o o o o o o o o o o . o
+o o o o o . o o o o o o o
+o o . o o o o o o o o o o
+o . o o o o o o o o o o o
+o o o o o o o o . o o o o
+
+Solution for (13, 13) [Time: 0ms]:
+o o o o o o o o o o o o o
+o o o o o o o o o o o o o
+o o o o o o o o o o o o o
+o o o o o o o o o o o o o
+o o o o o o o o o o o o o
+o o o o o o o o o o o o o
+o o o o o o o o o o o o o
+o o o o o o o o o o o o o
+o o o o o o o o o o o o o
+o o o o o o o o o o o o o
+o o o o o o o o o o o o o
+o o o o o o o o o o o o o
+o o o o o o o o o o o o o
+
+Solution for (14, 1) [Time: 2ms]:
+o . . . . . . . . . . . . .
+. . . . . . . . . . . o . .
+. . . . . o . . . . . . . .
+. . . . . . . o . . . . . .
+. . . . . . . . . . o . . .
+. o . . . . . . . . . . . .
+. . . o . . . . . . . . . .
+. . . . . . . . o . . . . .
+. . . . . . . . . . . . . o
+. . o . . . . . . . . . . .
+. . . . . . . . . . . . o .
+. . . . . . . . . o . . . .
+. . . . . . o . . . . . . .
+. . . . o . . . . . . . . .
+
+Solution for (14, 2) [Time: 5ms]:
+. . . . . o . o . . . . . .
+o . . . . o . . . . . . . .
+. . . . . . . o . . . . . o
+. . . . . . . . . o . . . o
+. . o . . . o . . . . . . .
+. . o . . . . . . . . . o .
+. . . . . . . . o o . . . .
+. . . . o . . . . . . o . .
+o . . o . . . . . . . . . .
+. . . . . . . . . . o . o .
+. . . o o . . . . . . . . .
+. o . . . . . . . . o . . .
+. o . . . . . . o . . . . .
+. . . . . . o . . . . o . .
+
+Solution for (14, 3) [Time: 2ms]:
+. . . . . o o o . . . . . .
+. . o o . o . . . . . . . .
+. . . . . . . . o o . . o .
+. . o . . . . . . o o . . .
+o . . . . . o . . . . . . o
+o . . . . o . . . . . . . o
+. . o . . . . . . o . o . .
+. o . . . . . . o . . o . .
+. o . o . . . . . . . . o .
+. . . . o . . o . . . . o .
+. o . . o . . o . . . . . .
+. . . o . . . . o . o . . .
+. . . . o . . . . . . o . o
+o . . . . . o . . . o . . .
+
+Solution for (14, 4) [Time: 0ms]:
+. . o . . . o o . . . . . o
+. . . o . . . . . o . o o .
+. . . . o o . . o . . . o .
+. . . . . o o . o o . . . .
+o o . o . . . . . . o . . .
+. . o . . . . . o . . . o o
+. . o . o o . o . . . . . .
+. o . . . . . o . . o o . .
+o o o . . . . . . . . . . o
+o . . o . . o . . . . . . o
+. . . . o . o . . o . o . .
+o o . . . . . . . o . . o .
+. . . . o . . o o . o . . .
+. . . o . o . . . . o o . .
+
+Solution for (14, 5) [Time: 1ms]:
+. o . . . . o o o . . o . .
+o o . . o . . o o . . . . .
+. . . . o o . . o . . . o o
+. o . o . . . . . o o . . o
+o . . . . o . . . . o o o .
+o . . o . . o . . o . . . o
+. . o o o o . . o . . . . .
+. . o o . o . . . . o o . .
+. . . . . . . . o o . o o o
+o . o . . . o . . . . o o .
+. . o . . o o o . . o . . .
+. o . . o . o . . o o . . .
+. o o . . . . o . o . . . o
+o . . o o . . o . . . . o .
+
+Solution for (14, 6) [Time: 1ms]:
+. o . . o o o . o o . . . .
+. . . o o o . . o . . o . o
+. . o . . o . o . . o . o o
+o . . o o . o o o . . . . .
+. o . . . . . o . o o o . o
+. . . o . o o . o . . . o o
+o . o o . . . o . . . . o o
+. . o o . o o . . o . . o .
+o . . . o . . o . o o o . .
+. o o . . o . . . o o o . .
+o o o . o . . o . . . . o .
+o . . . o . o . . . o o . o
+. o . o . . o . o o . o . .
+o o o . . . . . o . o . o .
+
+Solution for (14, 7) [Time: 0ms]:
+. o o o . . o . . . o o . o
+. . . . o o o o . o . o o .
+o . . o . o . o . . o o . o
+. . . o o o o o . o . o . .
+o . . o . . . o . o o . o o
+. o o o o . . . o . o . o .
+o o o o . o . . o o . . . .
+o o o . . o . o . . . o . o
+. . . . o o . . o o o . o o
+o . o . . . o o o o . o . .
+. o . . o . o o o . o . o .
+o o . . o o . . . . o . o o
+o o o . o . o . o o . . . .
+. . o o . . o . o . . o o o
+
+Solution for (14, 8) [Time: 0ms]:
+. o . o o o o o o . . . . o
+. o . o o . . o o o o o . .
+. . o o o . . o o o o o . .
+. o o . o . . . o o . o o o
+o o . . . o . . . o o o o o
+o o . . o . o . . o o . o o
+o . . o o . o . o . o . o o
+o . o . o o o . . . o o o .
+. o o . . . o o o . o o . o
+o o o o . o . o . o . . o .
+o . o o o o . o o . . . . o
+o o o . . o o . . . . o o o
+. . . o . o o o o o o o . .
+o . o o . o o o . o . . o .
+
+Solution for (14, 9) [Time: 3ms]:
+o . . o . o o . o o o o o .
+o . o . o o . o o . o . o o
+. o o o o o . . . o o . o o
+. o o o . o . o o o o o . .
+o . o . o o o o . . o o . o
+o o . o o o o o . o . . o .
+o o o o o . . . o o . o o .
+o . o . o . o . o o o o . o
+. o o . o . o o o . o . o o
+. o . o . o o o . o . o o o
+. . o o . . o o o o o o . o
+o o o . o o . . o o . . o o
+o o . o o o o o o . . o . .
+o o . o . . o o . . o o o o
+
+Solution for (14, 10) [Time: 0ms]:
+o o o o o o . o o o . o . .
+o o . . . o o o . o o o o o
+o . o o o o o . . o . o o o
+. o o o o o . o o o o . o .
+o o o . o o o o o . . . o o
+. o . o o . o o o o o o . o
+o o o . o . o . o . o o o o
+o o o . o o o o . o o . . o
+o . o o . o . . o o o o o o
+. o o o . . o o . o o o o o
+o . . o o o . o o . o o o o
+o o . o o . o o o o o . o .
+o . o o o o o . o o . o . o
+. o o o . o o o o . o o o .
+
+Solution for (14, 11) [Time: 1ms]:
+. o o o o o . o o o . o o o
+o o o o o o o . o o o . o .
+o . o . o o o o . o o o o o
+o o o o o o . o o . . o o o
+o . o . o . o o o o o o o o
+o o o . o o o o . o o o o .
+. o o o o o o o . o o o . o
+. o . o . o o o o o o o o o
+o o o o o o o . o . o . o o
+o . . o . o o o o o o o o o
+o o o o o . o o o o . o . o
+o o . o o o o . o o o . o o
+o o o o . . o o o . o o o o
+o o o o o o . o o o o o . .
+
+Solution for (14, 12) [Time: 1ms]:
+o o o o o o o o o o . o o .
+o . o . o o o o o o o o o o
+o o o o o o o . o o . o o o
+. o o o . o o o o o o o o o
+. o o o o o o o o o o o o .
+o o o . o . o o o o o o o o
+o o o o . o . o o o o o o o
+o o . o o o . o o o o o o o
+o o o o o o o o o . o o . o
+o o o o o . o o o o o . o o
+o . o o o o o o o o o o . o
+o o o o o o o . o . o o o o
+o o o o o o o o . o o . o o
+o o . o o o o o . o o o o o
+
+Solution for (14, 13) [Time: 0ms]:
+o o . o o o o o o o o o o o
+o o o o o . o o o o o o o o
+o o o o o o o o o . o o o o
+o o o o . o o o o o o o o o
+o . o o o o o o o o o o o o
+o o o o o o . o o o o o o o
+o o o o o o o . o o o o o o
+o o o o o o o o . o o o o o
+o o o . o o o o o o o o o o
+o o o o o o o o o o o o o .
+o o o o o o o o o o . o o o
+o o o o o o o o o o o . o o
+. o o o o o o o o o o o o o
+o o o o o o o o o o o o . o
+
+Solution for (14, 14) [Time: 0ms]:
+o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o
+
+Solution for (15, 1) [Time: 1ms]:
+. . . . o . . . . . . . . . .
+. . . . . . o . . . . . . . .
+. . . . . . . . . . . . . . o
+. . . . . . . . . . . o . . .
+. o . . . . . . . . . . . . .
+. . . o . . . . . . . . . . .
+. . . . . . . . . . . . . o .
+. . . . . . . . . . o . . . .
+. . o . . . . . . . . . . . .
+. . . . . . . . . o . . . . .
+. . . . . o . . . . . . . . .
+. . . . . . . . . . . . o . .
+. . . . . . . . o . . . . . .
+o . . . . . . . . . . . . . .
+. . . . . . . o . . . . . . .
+
+Solution for (15, 2) [Time: 0ms]:
+. o . . . o . . . . . . . . .
+. . . . . . . . . . o . o . .
+. . . . . o . . . o . . . . .
+. . . . o . o . . . . . . . .
+. . . . . . . . . . . . . o o
+. . . o o . . . . . . . . . .
+. . . . . . . . o . o . . . .
+. o . . . . . o . . . . . . .
+. . o . . . . . . . . . o . .
+. . . . . . . . o . . . . . o
+o . . o . . . . . . . . . . .
+. . . . . . . o . . . . . o .
+o . . . . . . . . o . . . . .
+. . . . . . o . . . . o . . .
+. . o . . . . . . . . o . . .
+
+Solution for (15, 3) [Time: 1ms]:
+. . o . . . . . o . . o . . .
+. . . . . . . . o o . . o . .
+. . . . . o . o o . . . . . .
+. . . o o . o . . . . . . . .
+. o . . o . . . . . . . . . o
+. o . . . . . . . . o . . . o
+o . o . . o . . . . . . . . .
+o . . . o . . . . . . . . o .
+. . . . . . . o . . o . o . .
+. . . . . . . . . o . . o o .
+. . . o . o . . . . . . . . o
+. o . o . . o . . . . . . . .
+. . o . . . . . . . o . . o .
+o . . . . . . . . o . o . . .
+. . . . . . o o . . . o . . .
+
+Solution for (15, 4) [Time: 1ms]:
+o . . . . . . o . o . . . o .
+. . o o . . o . o . . . . . .
+. o . . . o . . . . o . . o .
+. . o . . o o . o . . . . . .
+. . o . o . . . o . . . o . .
+o . . o . . . . o . . o . . .
+. . . . o . . . . o o . o . .
+. o . . . . . o . . . o . o .
+. o o . . . . . . . . . . o o
+. . . o o o . . . . . . . . o
+o . . . . . o . . . . o . . o
+o . . . o . . o . . o . . . .
+. . . . . o . o . o . . o . .
+. o . . . . o . . . o . . . o
+. . . o . . . . . o . o o . .
+
+Solution for (15, 5) [Time: 1ms]:
+. . o o o . . o o . . . . . .
+. . . . . . o o . . o o . . o
+o . . . o . . . . o o . o . .
+o . o o . . o o . . . . . . .
+o . . . o o . . . . . . o . o
+. o . . o o . . . . o . . o .
+. . . . . o o . o . o . . o .
+. o . o . . . o o . . . . o .
+. . o . . . o . . o . o . . o
+. o o o . o . . . . . . . . o
+. o . o . . . o . . . . o . o
+. . o . . . . . . o o . o o .
+o o . . . . o . . . . o . o .
+o . . . o . . . o o . o . . .
+. . . . . o . . o o . o o . .
+
+Solution for (15, 6) [Time: 0ms]:
+o . o . . o . . o . o . . . o
+. . . . o o . o . o . o . o .
+o . . o . o . . o . . o . o .
+. o . o o . o . o . o . . . .
+. . o . . . o . . . . o o o o
+. o o . o . . o . . . o . . o
+. o . . . . o . o o . o o . .
+o . o o . . . . . o . o o . .
+o . . o o o . . . . . . o . o
+o . . . . o o . . . o . o . o
+o . . o . . . o o . o . . o .
+. o o . . . o . o . o . . o .
+. o o . o . . o . o o . . . .
+. o . . . o o o . o . . . . o
+. . . o o . . o . o . . o o .
+
+Solution for (15, 7) [Time: 1ms]:
+. o . . o o . o o . o . . . o
+. . . o o . . o o o o . . . o
+o . . o . . . o . o . o . o o
+o . . . o . . . o . o o o o .
+. o o o o . o . o . . . o . .
+o o o . . . o . . . o . o . o
+. . o . o o o o . . . . o o .
+. o o o . . o . . o o . . . o
+o o o . . o . . o . o . o . .
+. . . o . o o . . o . o . o o
+. . o o . . o . . o o . o o .
+o o . . . . o . o o . o . . o
+o . o . . o . o o . . o . o .
+o . . o o o . o . . . o o . .
+. o . . o o . o . o . o . o .
+
+Solution for (15, 8) [Time: 1ms]:
+o . o . o o o . . . . o o o .
+o . o o . . o . o . o . . o o
+o . . o . . o o o o . . o o .
+. o . o . . o o . o o o o . .
+o . . . o o . o o o . . . o o
+o o . . o o . o o . . o . . o
+o o . . o o . . . . o o o o .
+. o . o o . o . o o o . . . o
+o . o . o . . . . o o o o o .
+. o . . . o o o o . . o . o o
+. . o . o o o o o o o . . . .
+. o o o . o . . . o . . o o o
+. o o o . o . o . . . o o . o
+o o o o . . o . . . o o . . o
+. . o o o . . o o o o . o . .
+
+Solution for (15, 9) [Time: 0ms]:
+. o . o o o o o . . . o o o .
+o o . o . o . . o . o . o o o
+. . o . o o o o o . o o . o .
+o o o . o . o o . o o . . o .
+o . o o . . o . o o . o o . o
+o o o o o . o . . o o . o . .
+o . . o o . o . . o . o o o o
+o o . o . o . . o o o o . . o
+. . o o . o . o o o o . . o o
+o o o . . o . o . o o . . o o
+. . o o o . . o o . o o o o .
+o . o . o . o o o o . o o . .
+o o . . o o o o . . . o o . o
+. o . o o o o o o . . . o . o
+. o o . . o . . o o o o . o o
+
+Solution for (15, 10) [Time: 0ms]:
+o o o o . o . o . o o o o . .
+o . o o o o o . . . o o o o .
+o o . . o o . o o o . o o . o
+o . . . o o . o o o o . o o o
+o . o o o . o . . o o o . o o
+o o o . . o o o . . o . o o o
+. o o o o . o o o o . . o o .
+. o . o . . o o o . o o o o o
+o o . o . o o . o o . o o . o
+o o o o o o . o . . o . . o o
+o . o o o . o o o o . o . . o
+. o o . o o o o o o o o . . .
+o . o o . . o . o . o o o o o
+. o . o o o o o o o . . o o .
+. o o . o o . . o o o o . o o
+
+Solution for (15, 11) [Time: 1ms]:
+o . o o o o o o . . o o . o o
+o o o . o o o o o o . o o . .
+o . o o o o o . . o o o o o .
+o o o o o o . o o . . . o o o
+. o o o o o . o o o o . o . o
+. o o . o . o . o o o o o o o
+o . o . o . . o o o o o o o o
+o o o o . o o o . o o . o . o
+o o o o o . o o o o o o . . .
+o o . o . o o o o o . o . o o
+. o o o o o o o o . . . o o o
+. o o o o o . o o . o o . o o
+o o . . . o o . o o o o o o o
+o . . o o . o . o o o o o o o
+o o . o . o o o . o o o o o .
+
+Solution for (15, 12) [Time: 0ms]:
+o o o o o . . o o o o o o . o
+. o o . o o o o o . o o o o o
+o o . o . o o o . o o o o o o
+o o o o . o o . o o o . o o o
+o . . o o . o o o o o o o o o
+o o o o o o o o . o . . o o o
+. o o . o o o o o o o o o . o
+o o o o o o o . o . o o . o o
+o o o o o o o . o . o . o o o
+. o o o o o o o o o o o . . o
+o o . o o . . o o o o o o o o
+o o o . o o . o . o o o o o o
+o . o o o o o o o o . o o o .
+o o o o . o o o o o o o . o .
+o . o o o o o o o o . o o o .
+
+Solution for (15, 13) [Time: 1ms]:
+. o o o o o o o . o o o o o o
+o o o o o o o o . o . o o o o
+o o o . o . o o o o o o o o o
+o o o o o o . o o . o o o o o
+o o o . o o . o o o o o o o o
+o o o o o o o o o o . . o o o
+o . o o . o o o o o o o o o o
+o o . o o o o o o o o o o . o
+o o o o o . o o o . o o o o o
+o o o o o o o . o o o o o o .
+o o o o . o o . o o o o o o o
+o . o o o o o o o o o o . o o
+o o o o o o o o o o o o . . o
+o o . o o o o o o o o . o o o
+. o o o o o o o o o o o o o .
+
+Solution for (15, 14) [Time: 1ms]:
+o o o o o o o o o o . o o o o
+o o o o o o o o o o o o o o .
+o o o o o o o . o o o o o o o
+o o o o o o o o o o o . o o o
+o o o o o o o o . o o o o o o
+o o o o o . o o o o o o o o o
+o o o . o o o o o o o o o o o
+o o o o o o o o o . o o o o o
+o o o o o o o o o o o o . o o
+. o o o o o o o o o o o o o o
+o o o o o o . o o o o o o o o
+o o o o o o o o o o o o o . o
+o . o o o o o o o o o o o o o
+o o . o o o o o o o o o o o o
+o o o o . o o o o o o o o o o
+
+Solution for (15, 15) [Time: 0ms]:
+o o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o o
+
+Solution for (16, 1) [Time: 2ms]:
+. . . . . . . . . . . o . . . .
+. . . . . o . . . . . . . . . .
+o . . . . . . . . . . . . . . .
+. . . . . . o . . . . . . . . .
+. . . . . . . . . . . . . o . .
+. . . . . . . . . . o . . . . .
+. . . . . . . . . . . . . . o .
+. o . . . . . . . . . . . . . .
+. . . . o . . . . . . . . . . .
+. . . . . . . . . o . . . . . .
+. . . o . . . . . . . . . . . .
+. . . . . . . . o . . . . . . .
+. . o . . . . . . . . . . . . .
+. . . . . . . . . . . . o . . .
+. . . . . . . . . . . . . . . o
+. . . . . . . o . . . . . . . .
+
+Solution for (16, 2) [Time: 1ms]:
+. . o . . . . . . . . o . . . .
+. . . . . o . . . o . . . . . .
+. . . . . . . . . o o . . . . .
+o . . . o . . . . . . . . . . .
+o . . . . . . . . . . . . o . .
+. . . . o . . . . . . . . . . o
+. . . . . . . . . . . . o . . o
+. . . o . . . . o . . . . . . .
+. o . . . . . . . . o . . . . .
+. . . o . . . o . . . . . . . .
+. . . . . . . . . . . . . o o .
+. . . . . o o . . . . . . . . .
+. o o . . . . . . . . . . . . .
+. . . . . . . . . . . o o . . .
+. . . . . . o . . . . . . . o .
+. . . . . . . o o . . . . . . .
+
+Solution for (16, 3) [Time: 2ms]:
+. . . . . . . . o . . o . o . .
+. . . . . . . . o . o . . . o .
+. . . o . . . o . . . . o . . .
+. . o . . . o . . . . . o . . .
+. o . . o . . . . o . . . . . .
+. . . . . o . o . . . . . o . .
+. . o . . . . . . . o . . o . .
+. . . . . . o . . . . . . . o o
+. . o . o . . . . . . . . . o .
+. o . . . . o . . . . . o . . .
+. . . . . . . . . o . o . . . o
+o . . o . . . . . o . . . . . .
+o . . . . . . o o . . . . . . .
+. . . . o o . . . . . . . . . o
+o . . o . . . . . . . o . . . .
+. o . . . o . . . . o . . . . .
+
+Solution for (16, 4) [Time: 1ms]:
+. . . o o . . o . o . . . . . .
+. . . o o . . . . o o . . . . .
+. o . . o . . o . . o . . . . .
+. o . . . . . . o . . . o o . .
+o . . . . . . . o o . . . . . o
+. . o . . . . . . o . . . o o .
+. . . . . o o . . . . o o . . .
+o . . . . . . . . . o . . . o o
+. . o . . . . . o . . . . . o o
+. o . . . o o o . . . . . . . .
+. o . o . . . . . . . o o . . .
+. . o . . . . o . . . o . o . .
+. . . . o o . . . . . . . o . o
+. . o . . . o . o . o . . . . .
+o . . . . o . . . . . . o . o .
+o . . o . . o . . . . o . . . .
+
+Solution for (16, 5) [Time: 0ms]:
+. . . o . . o o . o . . o . . .
+. o o . . . . o . . . . . o . o
+o o o . . . . o o . . . . . . .
+. . o o . o . . o . . o . . . .
+o o . . . . . . . . o o o . . .
+. . . . . . . . o o . . o o o .
+. . . . . o . o . . . . . o o o
+. . o . o . o . . o o . . . . .
+. . o o o . o . . . . . . . . o
+o . . . . . . o . . . o . o o .
+. . . . . . . . o . o o o o . .
+o o . . o o . . . . . . . . . o
+o . . o . . . . o . o . . . . o
+. . . . . o o . . o o . . . o .
+. o . o o . . . . o . o . . . .
+. . . . o o o . . . . . o . o .
+
+Solution for (16, 6) [Time: 0ms]:
+. . . o . . . o . o o o o . . .
+. o . o . . . . o o . . . o o .
+. . . o . . . . o . o o . o o .
+o o . . o . . . . . o . o . . o
+o . . . o o . . . . . . o o . o
+o o o . . o . . . o . . . o . .
+. . . . . o . o . . . o o o . o
+o o . . o . o . . o . o . . . .
+o . o . o o . . . . . o . . o .
+. o . o . . . o o . . . o . . o
+. . o o . o . o . . o . . . . o
+o . . . . o o . o o . . . . o .
+. . . o . . o . . . o o o o . .
+. o o . . . o . o . . . . . o o
+. . o . o . o o . . o . . . o .
+. . o . o . o o o o . . . . . .
+
+Solution for (16, 7) [Time: 1ms]:
+. . . . o o o . . . . o o . o o
+. o . . . o . . o . o o o . . o
+. . o o . o . o . . . o . o o .
+. . o o . . o . o o . . . o . o
+. o o . o o o . . o . . . . . o
+o o o . . . . o . . . o o . . o
+o o o . . . . . o o . . . o o .
+. . . . o . o . o . o o . . o o
+o . o . o . o o o . . . o . . .
+o o . . . . . . o . o . o o o .
+o o . o o . . . o o . . . o . .
+. o . o . . o o . o . . o o . .
+. . . o o o . o . . o o . . . o
+o . . . . o o . . o o . . o o .
+. . o o o . . o . . o o . . o .
+o . . o . o . o . o o . o . . .
+
+Solution for (16, 8) [Time: 3ms]:
+o . o o . o o . . o o . . . o .
+o o o . . . o o . o . o . o . .
+. . o . o . o o . . o . . o o o
+o . o . o . o o o . . . o o . .
+. o . o . o . o . o o . o . . o
+. . o o . . . . . o . o o o o o
+o . . . o . . . o o . o o o . o
+. . o . o o . . o . . o . o o o
+o o o . . o o . . . o . . . o o
+. o . . o . . . o o o o . o o .
+o o . . . o . . o o o . o . o .
+. o o o . . o . . . o . o . o o
+. . . o o . . o o . . o o o . o
+o o . o o o . o o . . o . . . .
+. . . o . o o o . o o o o . . .
+o o . o o o o o o . . . . . . .
+
+Solution for (16, 9) [Time: 0ms]:
+. o . o . o o o . o . o o o . .
+o o o o . . o o o . . . . o . o
+o o o o . . . o . o o . . o . o
+o o . . . o . o o o o . . . o o
+o . . o o o o . o . . . o o . o
+. o . . . o . . o o o o o o o .
+o . o o o . . o o . . . o o . o
+. . o . o o . . . o o . o o o o
+o . . o o . o o . . o o o . . o
+o . . o o o o . . . o o . . o o
+. . o o . . o . o o o o . . o o
+o o o . . o o o . . . o o . o .
+. o . o o o o . . o o o . . o .
+o o o . o . o o o o . . o . . .
+. . o . o . . o o o . o o o o .
+. o o . o o . . o . o o . o o .
+
+Solution for (16, 10) [Time: 1ms]:
+. o . o . o . o o o o . o o o .
+o . . o . . o o o o o o . . o o
+o . o o o . o . . o . . o o o o
+o o . o . o . o o o . o . . o o
+. o o o o o o . o . o o o . . .
+o o o . o . . . . o o o . o o o
+o o o o . o . . o . o . o . o o
+. o . . o o o . o o o . o o . o
+o o o o o . o o . . o o o . . .
+. o . o o o . o . o o o o o . .
+. o . o . o . o o . . o o o o o
+o . o . o . o o . o o o o . o .
+o . o . o o o o . o . o . o . o
+o . o . o . o o o o . . . o o o
+. . o o o o o o o . . . . o o o
+o o o . . o o . o . o o o o . .
+
+Solution for (16, 11) [Time: 0ms]:
+o o o o . . o . o o . o . o o o
+o . o o o . o o o o . o o . . o
+o o o . o o o o . o . o o . . o
+o o . o . . o o o o o . o o . o
+. o . o o o . . o o o o . o o o
+o o o o o . o . . . o o o . o o
+o o o . . o . . o . o o o o o o
+o o o o o o o o o . . . . o . o
+o . . . o o . . o o o o o o o o
+. o . o o . o o . o o . o o o o
+o o o . o o . o o o . . o o o .
+. o o o o o o o . . o o o . o .
+o . o o . o o o . . o o o o o .
+o . o . . o o o o o o o . o . o
+. . o o o o o o o o o o . . o .
+. o . o o o . o o o o . o o o .
+
+Solution for (16, 12) [Time: 0ms]:
+o o . o o o o . . . o o o o o o
+o o o o o . o o o o o o o . . .
+o . o . o o o o o o o o o . o .
+o . o . o o . . o o o o o o o o
+o o o . o o o o o o . . . o o o
+o o o o . o o o . o . . o o o o
+. o . o o o . o o . o o o o o o
+o . o o o o . . o o o o . o o o
+. o . o o . o o o o o o o o . o
+o o o o . o o o . . o o o o . o
+o . o o . o o o o o o . . o o o
+o o o o o . o o o o o o . . . o
+o o o . o o o o o o . . o . o o
+o o o o . . o o o . o o o o o .
+. o . o o o o . . o o o o o o o
+. o o o o o . o o o . o o o o .
+
+Solution for (16, 13) [Time: 1ms]:
+. o o . o o o . o o o o o o o o
+. o o o o o o o o . . o o o o o
+o o o o o . o o o . o o o o o .
+o o . o . o o o o o o o o . o o
+o o o o o o . o o o . o o . o o
+o o o o o o o . . o o . o o o o
+o o o o o o . o . o o o . o o o
+o o . . o o o o o o o o . o o o
+o o o . o o o o . o o . o o o o
+. . o o o . o o o o o o o o o o
+o o o o o o o o o o o o . . . o
+o o o o . o . o o o o o o o . o
+o o o o . o o o o . o o o o o .
+o o . o o o o o o o o . o o . o
+o . o o o o o . o o o o o o o .
+o . o o o . o o o o . o o o o o
+
+Solution for (16, 14) [Time: 1ms]:
+. o o o o o o o o o o o o o o .
+o . o o o o o o o o . o o o o o
+o o o o o o o o o o o o . o . o
+o o o o . o o o o o o o o . o o
+o o o . o o o . o o o o o o o o
+. o o o o o o o o o o o o o . o
+o o o o o o o . o o o . o o o o
+o o o o o o o o o . o o o o o .
+o . o o . o o o o o o o o o o o
+o o o o o o . o o o . o o o o o
+o o o o o o o o . o o o . o o o
+o o . o o . o o o o o o o o o o
+o o o o o . o o o o o . o o o o
+o o o o o o o o . o o o o . o o
+o o . o o o . o o o o o o o o o
+o o o . o o o o o . o o o o o o
+
+Solution for (16, 15) [Time: 1ms]:
+o o o o o o o o o o o o o o . o
+o . o o o o o o o o o o o o o o
+o o o o o o o o o o o o o . o o
+o o o o o o . o o o o o o o o o
+. o o o o o o o o o o o o o o o
+o o o o o o o o o o . o o o o o
+o o o o o o o o o . o o o o o o
+o o o o o o o . o o o o o o o o
+o o o o o . o o o o o o o o o o
+o o o o o o o o o o o o . o o o
+o o o o . o o o o o o o o o o o
+o o o o o o o o . o o o o o o o
+o o o o o o o o o o o o o o o .
+o o o o o o o o o o o . o o o o
+o o o . o o o o o o o o o o o o
+o o . o o o o o o o o o o o o o
+
+Solution for (16, 16) [Time: 0ms]:
+o o o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o o o
+o o o o o o o o o o o o o o o o
+

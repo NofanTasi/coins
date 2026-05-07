@@ -1,0 +1,9 @@
+SOLUTION COUNTS
+===============
+(3, 2): 2 solutions
+(4, 1): 2 solutions
+(4, 2): 11 solutions
+(5, 1): 10 solutions
+(5, 2): 92 solutions
+(6, 1): 4 solutions
+(8, 1): 92 solutions

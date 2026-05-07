@@ -1,0 +1,10 @@
+STRESS TEST RESULTS
+===================
+
+(N=24, C=1): FOUND in 9ms
+(N=24, C=12): FOUND in 4ms
+(N=32, C=4): FOUND in 6ms
+(N=32, C=16): FOUND in 7ms
+(N=64, C=2): FOUND in 19ms
+(N=64, C=32): FOUND in 23ms
+(N=100, C=50): FOUND in 75ms

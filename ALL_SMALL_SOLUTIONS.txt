@@ -1,0 +1,169 @@
+ALL SOLUTIONS FOR SMALL N
+=========================
+
+(2, 1): Found 0 solutions
+------------------------
+
+(3, 1): Found 0 solutions
+------------------------
+
+(3, 2): Found 2 solutions
+Solution #1:
+o o .
+o . o
+. o o
+
+Solution #2:
+. o o
+o . o
+o o .
+
+------------------------
+
+(4, 1): Found 2 solutions
+Solution #1:
+. o . .
+. . . o
+o . . .
+. . o .
+
+Solution #2:
+. . o .
+o . . .
+. . . o
+. o . .
+
+------------------------
+
+(4, 2): Found 11 solutions
+Solution #1:
+o o . .
+. . o o
+o o . .
+. . o o
+
+Solution #2:
+o . o .
+o . o .
+. o . o
+. o . o
+
+Solution #3:
+o . o .
+. o . o
+. o . o
+o . o .
+
+Solution #4:
+o . o .
+. . o o
+o o . .
+. o . o
+
+Solution #5:
+o . . o
+. o o .
+o . . o
+. o o .
+
+Solution #6:
+. o o .
+o . . o
+o . . o
+. o o .
+
+Solution #7:
+. o o .
+o . . o
+. o o .
+o . . o
+
+Solution #8:
+. o . o
+o o . .
+. . o o
+o . o .
+
+Solution #9:
+. o . o
+o . o .
+o . o .
+. o . o
+
+Solution #10:
+. o . o
+. o . o
+o . o .
+o . o .
+
+Solution #11:
+. . o o
+o o . .
+. . o o
+o o . .
+
+------------------------
+
+(4, 3): Found 10 solutions
+Solution #1:
+o o o .
+o . o o
+o o . o
+. o o o
+
+Solution #2:
+o o o .
+o . o o
+. o o o
+o o . o
+
+Solution #3:
+o o o .
+. o o o
+o o . o
+o . o o
+
+Solution #4:
+o o . o
+o . o o
+o o o .
+. o o o
+
+Solution #5:
+o o . o
+. o o o
+o . o o
+o o o .
+
+Solution #6:
+o . o o
+o o o .
+o o . o
+. o o o
+
+Solution #7:
+o . o o
+o o . o
+. o o o
+o o o .
+
+Solution #8:
+. o o o
+o o o .
+o . o o
+o o . o
+
+Solution #9:
+. o o o
+o o . o
+o o o .
+o . o o
+
+Solution #10:
+. o o o
+o o . o
+o . o o
+o o o .
+
+------------------------
+

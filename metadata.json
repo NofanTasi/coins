@@ -1,0 +1,6 @@
+{
+  "name": "Numisma: Square Board Challenge",
+  "description": "A mathematical puzzle exploring the Generalized N-Queens problem. Find solutions for any N and C using a high-performance Min-Conflicts heuristic solver.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
