@@ -161,6 +161,60 @@ export default function App() {
     }, 50);
   };
 
+  const handleMihaildConstruct = () => {
+    const result = new Set<string>();
+    if (c === 0) {
+      pushToHistory(result);
+      return;
+    }
+    if (c === n) {
+      for (let i = 0; i < n; i++) {
+        for (let j = 0; j < n; j++) {
+          result.add(`${i},${j}`);
+        }
+      }
+      pushToHistory(result);
+      return;
+    }
+
+    if (c > 0 && c < n - 1) {
+      const X = Array.from({ length: c }, (_, idx) => idx + 2); // 2..C+1
+      for (let i = 0; i < n; i++) {
+        for (let j = 0; j < n; j++) {
+          const i_j = i + 1;
+          const j_j = j + 1;
+          const val = ((i_j - j_j) % n + n) % n;
+          if (X.includes(val)) {
+            result.add(`${i},${j}`);
+          }
+        }
+      }
+    } else if (c === n - 1) {
+      for (let i = 0; i < n; i++) {
+        for (let j = 0; j < n; j++) {
+          result.add(`${i},${j}`);
+        }
+      }
+      // 2 : N-1 in Julia (1-indexed)
+      for (let i = 1; i < n - 1; i++) {
+        result.delete(`${i},${i}`);
+      }
+      if (n % 2 === 0) {
+        result.delete(`0,${n - 1}`);
+        result.delete(`${n - 1},0`);
+      } else {
+        result.delete(`0,0`);
+        result.delete(`${n - 1},${n - 1}`);
+      }
+    }
+
+    pushToHistory(result);
+    setLastActionPos(null);
+    setJustSolved(false);
+    setTime(0);
+    setTimerActive(false);
+  };
+
   const handleHint = () => {
     if (isSolving) return;
 
@@ -400,13 +454,20 @@ export default function App() {
               </button>
             </div>
 
-            <div className="grid grid-cols-3 gap-2 pt-2">
+            <div className="grid grid-cols-2 gap-2 pt-2">
               <button 
                 disabled={isSolving}
                 onClick={handleSolve}
                 className={`flex items-center justify-center p-3 border-2 transition-all font-black text-[10px] uppercase tracking-widest shadow-sm ${isSolving ? 'opacity-50 cursor-wait bg-min-ink text-min-bg' : 'border-min-ink text-min-ink hover:bg-min-ink/10'}`}
               >
                 {isSolving ? '...' : 'Solve'}
+              </button>
+              <button 
+                onClick={handleMihaildConstruct}
+                disabled={isSolving}
+                className="flex items-center justify-center p-3 border-2 border-min-ink text-min-ink hover:bg-min-ink/10 transition-all font-black text-[10px] uppercase tracking-widest shadow-sm gap-2"
+              >
+                <Zap size={12} /> Magic
               </button>
               <button 
                 onClick={handleHint}

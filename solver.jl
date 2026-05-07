@@ -58,6 +58,55 @@ function count_solutions(n::Int, c::Int)
     return total
 end
 
+# --- Construction Strategy (Mihaild Heuristic) ---
+
+function construct_mihaild(n::Int, c::Int)
+    m = Set{Tuple{Int, Int}}()
+    if c == 0
+        return m
+    end
+    if c == n
+        for i in 1:n, j in 1:n
+            push!(m, (i, j))
+        end
+        return m
+    end
+
+    if 0 < c < n - 1
+        X = collect(2 : c + 1)
+        for i in 1:n
+            for j in 1:n
+                # mod(i - j, n) in Julia handles negative numbers by returning sign-matched remainder
+                # Using mod(a-1, n)+1 pattern for 1-based indexing if needed, 
+                # but Julia's mod(i-j, n) is usually clear.
+                if mod(i - j, n) in X
+                    push!(m, (i, j))
+                end
+            end
+        end
+        return m
+    end
+
+    if c == n - 1
+        for i in 1:n, j in 1:n
+            push!(m, (i, j))
+        end
+        for i in 2 : n - 1
+            delete!(m, (i, i))
+        end
+        if n % 2 == 0
+            delete!(m, (1, n))
+            delete!(m, (n, 1))
+        else
+            delete!(m, (1, 1))
+            delete!(m, (n, n))
+        end
+        return m
+    end
+    
+    return m
+end
+
 # --- Min-Conflicts Heuristic (for Fast Single Solution) ---
 
 function find_solution_min_conflicts(n::Int, c::Int)
@@ -76,13 +125,22 @@ function find_solution_min_conflicts(n::Int, c::Int)
             min_diag_counts[r + cl] = get(min_diag_counts, r + cl, 0) + delta
         end
 
-        # Initial random assignment: C per row
-        for r in 1:n
-            cols = shuffle(1:n)
-            for i in 1:c
-                cl = cols[i]
-                push!(board, (r, cl))
+        # Initial assignment: 
+        if restart == 1
+            # Try the Mihaild construction first
+            board = construct_mihaild(n, c)
+            for (r, cl) in board
                 update_counts!(r, cl, 1)
+            end
+        else
+            # Random assignment: C per row
+            for r in 1:n
+                cols = shuffle(1:n)
+                for i in 1:c
+                    cl = cols[i]
+                    push!(board, (r, cl))
+                    update_counts!(r, cl, 1)
+                end
             end
         end
 
