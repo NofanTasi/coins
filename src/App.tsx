@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { 
   Minus, Plus, Maximize, RotateCcw, 
   Undo2, Redo2, Play, Pause, Square,
-  Zap, ZapOff
+  RefreshCcw
 } from 'lucide-react';
 import { 
   BoardState, 
@@ -17,7 +17,7 @@ import {
   getRemainingCount, 
   getViolations,
 } from './lib/gridUtils';
-import { findSolution, solveBacktrack } from './lib/solver';
+import { findSolution } from './lib/solver';
 
 export default function App() {
   const [n, setN] = useState<number>(5);
@@ -37,7 +37,7 @@ export default function App() {
   const [hoveredPos, setHoveredPos] = useState<string | null>(null);
   const [showAllHazards, setShowAllHazards] = useState(false);
 
-  const [zoom, setZoom] = useState<number>(1);
+  const [zoom, setZoom] = useState<number>(1.0);
   const [showNeighbors, setShowNeighbors] = useState(false);
   const [showExcess, setShowExcess] = useState(false);
   const [showRemaining, setShowRemaining] = useState(false);
@@ -142,7 +142,7 @@ export default function App() {
       scale = Math.min(scaleW, scaleH, 1.2);
     }
 
-    setZoom(Math.max(0.3, scale));
+    setZoom(1.0);
   }, []);
 
   const handleSolve = () => {
@@ -164,36 +164,20 @@ export default function App() {
   const handleHint = () => {
     if (isSolving) return;
 
-    // 1. Try to find a solution that includes everything CURRENTLY on the board
-    const solutionFromCurrent = solveBacktrack(n, c, board);
-    
-    if (solutionFromCurrent) {
-      // Current path is viable. Suggest adding one of the missing coins from THIS solution.
-      const missing = [...solutionFromCurrent].filter(key => !board.has(key));
-      if (missing.length > 0) {
-        setHint({ type: 'add', pos: missing[Math.floor(Math.random() * missing.length)] });
-      }
-    } else {
-      // Current path is a DEAD END (contradictions or too many coins).
-      // Find ANY valid solution for this N/C level as a template.
-      const anySolution = findSolution(n, c) || solveBacktrack(n, c);
-      if (anySolution) {
-        // 1. Identify coins that are on board but shouldn't be in THAT solution
-        const surplus = [...board].filter(key => !anySolution.has(key));
-        if (surplus.length > 0) {
-          // Important: Sort surplus by conflict score descending to suggest the "worst" coin first
-          surplus.sort((a, b) => {
-            const [rA, clA] = a.split(',').map(Number);
-            const [rB, clB] = b.split(',').map(Number);
-            return getExcessCount(rB, clB, c, board) - getExcessCount(rA, clA, c, board);
-          });
-          setHint({ type: 'remove', pos: surplus[0] });
-        } else {
-          // 2. Identify coins that are missing compared to our target solution
-          const missing = [...anySolution].filter(key => !board.has(key));
-          if (missing.length > 0) {
-            setHint({ type: 'add', pos: missing[Math.floor(Math.random() * missing.length)] });
-          }
+    // Use findSolution as a source of truth for the randomized hint
+    // Since findSolution is randomized, it will suggest variations each time
+    const anySolution = findSolution(n, c);
+    if (anySolution) {
+      // 1. Identify coins that are on board but shouldn't be in THAT solution
+      const surplus = [...board].filter(key => !anySolution.has(key));
+      if (surplus.length > 0) {
+        // Suggested removal
+        setHint({ type: 'remove', pos: surplus[Math.floor(Math.random() * surplus.length)] });
+      } else {
+        // 2. Identify coins that are missing compared to our target solution
+        const missing = [...anySolution].filter(key => !board.has(key));
+        if (missing.length > 0) {
+          setHint({ type: 'add', pos: missing[Math.floor(Math.random() * missing.length)] });
         }
       }
     }
@@ -272,13 +256,25 @@ export default function App() {
       <div 
         ref={containerRef}
         style={{ transform: `scale(${zoom})`, transformOrigin: 'top center' }}
-        className="w-full max-w-7xl mx-auto flex flex-col lg:flex-row gap-12 justify-center transition-transform duration-300 ease-out"
+        className="w-full max-w-7xl mx-auto flex flex-col items-center gap-12 justify-center transition-transform duration-300 ease-out"
       >
         
         {/* Header & Controls Column */}
-        <aside className="w-full lg:w-96 flex flex-col gap-8 shrink-0">
-          <header className="mb-0">
-            <h1 className="text-4xl md:text-6xl font-black tracking-tighter leading-none mb-2 uppercase">COIN PLACEMENT</h1>
+        <aside className="w-full max-w-2xl flex flex-col gap-8 shrink-0">
+          <header className="flex justify-between items-start">
+            <div>
+              <h1 className="text-4xl md:text-6xl font-black tracking-tighter leading-none mb-2 uppercase">COIN PLACEMENT</h1>
+              <div className="flex items-center gap-3 opacity-40">
+                <span className="text-[10px] font-black tracking-widest uppercase">Version 1.3.2</span>
+                <button 
+                  onClick={() => window.location.reload()}
+                  className="flex items-center gap-1 hover:opacity-100 transition-opacity"
+                >
+                  <RefreshCcw size={10} />
+                  <span className="text-[10px] font-black tracking-widest uppercase underline underline-offset-2">Update</span>
+                </button>
+              </div>
+            </div>
           </header>
 
           <section className="space-y-6 py-6 border-y-2 border-current">
@@ -302,9 +298,9 @@ export default function App() {
             </div>
 
             <div className="space-y-4">
-              <div className="flex justify-between items-end">
+              <div className="flex flex-col items-center">
                 <span className="text-[10px] font-black tracking-widest opacity-40 uppercase">Number</span>
-                <span className="text-2xl font-black tabular-nums">{n}</span>
+                <span className="text-3xl font-black tabular-nums">{n}</span>
               </div>
               <input 
                 type="range" min="2" max="32" value={n} 
@@ -320,9 +316,9 @@ export default function App() {
             </div>
 
             <div className="space-y-4">
-              <div className="flex justify-between items-end">
+              <div className="flex flex-col items-center">
                 <span className="text-[10px] font-black tracking-widest opacity-40 uppercase">Coins</span>
-                <span className="text-2xl font-black tabular-nums">{c}</span>
+                <span className="text-3xl font-black tabular-nums">{c}</span>
               </div>
               <input 
                 type="range" min="1" max={n} value={c} 
@@ -417,7 +413,7 @@ export default function App() {
               </button>
               <button 
                 onClick={() => { pushToHistory(new Set()); setLastActionPos(null); setTime(0); setTimerActive(false); }}
-                className="flex items-center justify-center p-3 border-2 border-min-ink text-min-ink hover:bg-min-ink/10 transition-all font-black text-[10px] uppercase tracking-widest shadow-sm"
+                className="col-span-2 flex items-center justify-center p-3 border-2 border-min-ink text-min-ink hover:bg-min-ink/10 transition-all font-black text-[10px] uppercase tracking-widest shadow-sm"
               >
                 Wipe
               </button>

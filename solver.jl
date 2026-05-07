@@ -5,63 +5,10 @@ Solves for N columns/rows with exactly C coins per line.
 
 using Random
 
-# --- Systematic Backtracking (for Counting/Exhaustive Search) ---
-
-function count_solutions(n::Int, c::Int)
-    board = Set{Tuple{Int, Int}}()
-    rows = zeros(Int, n)
-    cols = zeros(Int, n)
-    major = Dict{Int, Int}()
-    minor = Dict{Int, Int}()
-    total = 0
-
-    function backtrack(index::Int)
-        if length(board) == n * c
-            total += 1
-            return
-        end
-        if index >= n * n
-            return
-        end
-
-        r = div(index, n) + 1
-        cl = mod(index, n) + 1
-        
-        # Branch 1: Try placing a coin
-        m_key = r - cl
-        mi_key = r + cl
-        if rows[r] < c && cols[cl] < c && get(major, m_key, 0) < c && get(minor, mi_key, 0) < c
-            push!(board, (r, cl))
-            rows[r] += 1
-            cols[cl] += 1
-            major[m_key] = get(major, m_key, 0) + 1
-            minor[mi_key] = get(minor, mi_key, 0) + 1
-
-            backtrack(index + 1)
-
-            # Backtrack
-            delete!(board, (r, cl))
-            rows[r] -= 1
-            cols[cl] -= 1
-            major[m_key] -= 1
-            minor[mi_key] -= 1
-        end
-
-        # Branch 2: Try skipping this cell
-        if rows[r] + (n - cl) >= c
-            backtrack(index + 1)
-        end
-    end
-
-    println("Counting all solutions for N=$n, C=$c...")
-    backtrack(0)
-    return total
-end
-
 # --- Min-Conflicts Heuristic (for Fast Single Solution) ---
 
 function find_solution_min_conflicts(n::Int, c::Int)
-    max_restarts = 10
+    max_restarts = 20
     max_iterations = n * n * 50
 
     for restart in 1:max_restarts
@@ -161,30 +108,22 @@ end
 # CLI Entry
 if abspath(PROGRAM_FILE) == @__FILE__
     if length(ARGS) < 2
-        println("Usage: julia solver.jl <N> <C> [--count]")
+        println("Usage: julia solver.jl <N> <C>")
         exit(1)
     end
     n = parse(Int, ARGS[1])
     c = parse(Int, ARGS[2])
-    do_count = "--count" in ARGS
 
-    if do_count
-        start_time = time()
-        count = count_solutions(n, c)
-        end_time = time()
-        println("Found $count solutions. [Time: $(round((end_time - start_time)*1000, digits=2))ms]")
+    println("Finding a solution for ($n, $c) using Min-Conflicts...")
+    start_time = time()
+    sol = find_solution_min_conflicts(n, c)
+    end_time = time()
+    
+    if sol === nothing
+        println("No solution found in allotted time.")
     else
-        println("Finding a solution for ($n, $c) using Min-Conflicts...")
-        start_time = time()
-        sol = find_solution_min_conflicts(n, c)
-        end_time = time()
-        
-        if sol === nothing
-            println("No solution found in allotted time.")
-        else
-            println("Success! [Time: $(round((end_time - start_time)*1000, digits=2))ms]")
-            print_board(n, sol)
-        end
+        println("Success! [Time: $(round((end_time - start_time)*1000, digits=2))ms]")
+        print_board(n, sol)
     end
 end
 
