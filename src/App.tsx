@@ -41,7 +41,6 @@ export default function App() {
   const [showNeighbors, setShowNeighbors] = useState(false);
   const [showExcess, setShowExcess] = useState(false);
   const [showRemaining, setShowRemaining] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [isSolving, setIsSolving] = useState(false);
   const [hint, setHint] = useState<{ type: 'add' | 'remove'; pos: string } | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -125,8 +124,8 @@ export default function App() {
     const availableHeight = windowHeight - padding;
     
     // Base dimensions for content
-    const totalContentWidth = 800; 
-    const totalContentHeight = 900; 
+    const totalContentWidth = 900; 
+    const totalContentHeight = 1600; 
     
     const scaleW = availableWidth / totalContentWidth;
     const scaleH = availableHeight / totalContentHeight;
@@ -219,10 +218,6 @@ export default function App() {
     fitToScreen();
   }, [n, fitToScreen]);
 
-  useEffect(() => {
-    document.body.classList.toggle('dark', isDarkMode);
-  }, [isDarkMode]);
-
   const toggleCoin = useCallback((row: number, col: number) => {
     const key = `${row},${col}`;
     const newBoard = new Set(board);
@@ -280,16 +275,7 @@ export default function App() {
         {/* Header & Controls Column */}
         <aside className="w-full flex flex-col gap-8 shrink-0">
           <header className="mb-0">
-            <h1 className="text-4xl md:text-6xl font-black italic tracking-tighter leading-none mb-2 uppercase">COIN PLACEMENT</h1>
-            <button 
-              onClick={() => setIsDarkMode(!isDarkMode)}
-              className="text-xs mt-4 opacity-90 hover:opacity-100 flex items-center gap-4 group transition-opacity"
-            >
-              <span className="w-18 border-2 border-min-ink py-1 text-center bg-min-ink text-min-bg transition-colors font-bold uppercase">
-                {isDarkMode ? 'LIGHT' : 'DARK'}
-              </span>
-              <span className="font-bold tracking-[0.2em] uppercase">Mode</span>
-            </button>
+            <h1 className="text-4xl md:text-6xl font-black tracking-tighter leading-none mb-2 uppercase">COIN PLACEMENT</h1>
           </header>
 
           <section className="grid grid-cols-3 lg:grid-cols-1 gap-4 py-6 border-y-2 border-current">
@@ -387,36 +373,79 @@ export default function App() {
               <button 
                 onClick={undo}
                 disabled={historyIndex <= 0}
-                className="flex items-center justify-center gap-2 p-4 border-2 border-current hover:bg-current hover:text-min-bg disabled:opacity-20 disabled:pointer-events-none transition-all font-black text-[10px] uppercase tracking-widest"
+                className="flex items-center justify-center gap-2 p-3 border-2 border-current hover:bg-current hover:text-min-bg disabled:opacity-20 disabled:pointer-events-none transition-all font-black text-[10px] uppercase tracking-widest"
               >
                 <Undo2 size={12} /> Undo
               </button>
               <button 
                 onClick={redo}
                 disabled={historyIndex >= history.length - 1}
-                className="flex items-center justify-center gap-2 p-4 border-2 border-current hover:bg-current hover:text-min-bg disabled:opacity-20 disabled:pointer-events-none transition-all font-black text-[10px] uppercase tracking-widest"
+                className="flex items-center justify-center gap-2 p-3 border-2 border-current hover:bg-current hover:text-min-bg disabled:opacity-20 disabled:pointer-events-none transition-all font-black text-[10px] uppercase tracking-widest"
               >
                 Redo <Redo2 size={12} />
               </button>
             </div>
 
-            <button 
-              onClick={() => setShowAllHazards(!showAllHazards)}
-              className={`w-full flex items-center justify-center text-center p-5 border-2 transition-all font-black text-xs uppercase tracking-[0.2em] ${showAllHazards ? 'bg-neutral-800 text-neutral-100 border-neutral-800 shadow-inner' : 'border-neutral-200 text-neutral-400 hover:bg-neutral-50 hover:text-neutral-600'}`}
-            >
-              <span>HOVER</span>
-            </button>
+            <div className="grid grid-cols-2 gap-2">
+              <button 
+                onClick={() => setShowAllHazards(!showAllHazards)}
+                className={`flex items-center justify-center p-3 border-2 transition-all font-black text-[10px] uppercase tracking-widest ${showAllHazards ? 'bg-neutral-800 text-neutral-100 border-neutral-800 shadow-inner' : 'border-neutral-200 text-neutral-400 hover:bg-neutral-50 hover:text-neutral-600'}`}
+              >
+                Overlap
+              </button>
+              <button 
+                onClick={() => setShowNeighbors(!showNeighbors)}
+                className={`flex items-center justify-center p-3 border-2 transition-all font-black text-[10px] uppercase tracking-widest ${showNeighbors ? 'bg-min-ink text-min-bg border-min-ink shadow-inner' : 'border-min-ink/30 text-min-ink hover:bg-min-ink/5'}`}
+              >
+                Neighbors
+              </button>
+              <button 
+                onClick={() => setShowExcess(!showExcess)}
+                className={`flex items-center justify-center p-3 border-2 transition-all font-black text-[10px] uppercase tracking-widest ${showExcess ? 'bg-min-ink text-min-bg border-min-ink shadow-inner' : 'border-min-ink/30 text-min-ink hover:bg-min-ink/5'}`}
+              >
+                Excess
+              </button>
+              <button 
+                onClick={() => setShowRemaining(!showRemaining)}
+                className={`flex items-center justify-center p-3 border-2 transition-all font-black text-[10px] uppercase tracking-widest ${showRemaining ? 'bg-min-ink text-min-bg border-min-ink shadow-inner' : 'border-min-ink/30 text-min-ink hover:bg-min-ink/5'}`}
+              >
+                Remaining
+              </button>
+            </div>
+
+            <div className="grid grid-cols-3 gap-2 pt-2">
+              <button 
+                disabled={isSolving}
+                onClick={handleSolve}
+                className={`flex items-center justify-center p-3 border-2 transition-all font-black text-[10px] uppercase tracking-widest shadow-sm ${isSolving ? 'opacity-50 cursor-wait bg-min-ink text-min-bg' : 'border-min-ink text-min-ink hover:bg-min-ink/10'}`}
+              >
+                {isSolving ? '...' : 'Solve'}
+              </button>
+              <button 
+                onClick={handleHint}
+                disabled={isSolved || isSolving}
+                className={`flex items-center justify-center p-3 border-2 transition-all font-black text-[10px] uppercase tracking-widest shadow-sm ${isSolved || isSolving ? 'opacity-20 cursor-not-allowed border-current/20' : 'border-current text-current hover:bg-current/10'}`}
+              >
+                Hint
+              </button>
+              <button 
+                onClick={() => { pushToHistory(new Set()); setLastActionPos(null); setTime(0); setTimerActive(false); }}
+                className="flex items-center justify-center p-3 border-2 border-min-ink text-min-ink hover:bg-min-ink/10 transition-all font-black text-[10px] uppercase tracking-widest shadow-sm"
+              >
+                Wipe
+              </button>
+            </div>
           </section>
         </aside>
 
-        {/* Board & Actions Area */}
-        <div className="w-full space-y-12 flex flex-col items-center">
-          <div className="w-full flex items-center justify-center overflow-x-auto min-h-[300px] touch-auto">
+        {/* Board Area */}
+        <div className="w-full flex flex-col items-center">
+          <div className="w-full flex items-center justify-center min-h-[300px] touch-auto">
             <div 
               style={{ 
                 gridTemplateColumns: `repeat(${n}, 1fr)`,
-                width: `min(700px, 95vw)`,
-                height: `min(700px, 95vw)`
+                width: `min(850px, 95vw)`,
+                height: `min(850px, 95vw)`
               }} 
               className="grid border-2 border-current bg-min-bg shadow-2xl relative overflow-hidden transition-all duration-300"
             >
@@ -461,7 +490,7 @@ export default function App() {
                         {isSelected && !isViolation && showNeighbors && (
                           <span 
                             style={{ fontSize: `${dynamicFontSize}px` }}
-                            className={`font-medium leading-none ${isDarkMode ? 'text-black' : 'text-white'} pointer-events-none`}
+                            className="font-medium leading-none text-black pointer-events-none"
                           >
                             {neighborCount}
                           </span>
@@ -507,51 +536,6 @@ export default function App() {
               })}
             </div>
           </div>
-
-          {/* Bottom Actions Area */}
-          <section className="grid grid-cols-1 md:grid-cols-3 gap-2 py-8 border-t-2 border-current">
-            <button 
-              onClick={() => setShowNeighbors(!showNeighbors)}
-              className={`text-center p-5 border-2 transition-all font-bold text-[10px] uppercase tracking-[0.2em] ${showNeighbors ? 'bg-min-ink text-min-bg border-min-ink shadow-inner' : 'border-min-ink/30 text-min-ink hover:bg-min-ink/5'}`}
-            >
-              <span>Neighbors</span>
-            </button>
-            <button 
-              onClick={() => setShowExcess(!showExcess)}
-              className={`text-center p-5 border-2 transition-all font-bold text-[10px] uppercase tracking-[0.2em] ${showExcess ? 'bg-min-ink text-min-bg border-min-ink shadow-inner' : 'border-min-ink/30 text-min-ink hover:bg-min-ink/5'}`}
-            >
-              <span>Excesses</span>
-            </button>
-            <button 
-              onClick={() => setShowRemaining(!showRemaining)}
-              className={`text-center p-5 border-2 transition-all font-bold text-[10px] uppercase tracking-[0.2em] ${showRemaining ? 'bg-min-ink text-min-bg border-min-ink shadow-inner' : 'border-min-ink/30 text-min-ink hover:bg-min-ink/5'}`}
-            >
-              <span>Remaining</span>
-            </button>
-
-            <button 
-              disabled={isSolving}
-              onClick={handleSolve}
-              className={`md:col-span-1 text-center p-5 border-2 transition-all font-bold text-xs uppercase tracking-[0.2em] focus:outline-none shadow-sm ${isSolving ? 'opacity-50 cursor-wait bg-min-ink text-min-bg' : 'border-min-ink text-min-ink hover:bg-min-ink/5'}`}
-            >
-              {isSolving ? 'Solving...' : 'Solve'}
-            </button>
-
-            <button 
-              onClick={handleHint}
-              disabled={isSolved || isSolving}
-              className={`md:col-span-1 text-center p-5 border-2 transition-all font-bold text-xs uppercase tracking-[0.2em] focus:outline-none shadow-sm ${isSolved || isSolving ? 'opacity-20 cursor-not-allowed border-current/20' : 'border-current text-current hover:bg-current/5'}`}
-            >
-              <span>Hint</span>
-            </button>
-
-            <button 
-              onClick={() => { pushToHistory(new Set()); setLastActionPos(null); setTime(0); setTimerActive(false); }}
-              className="md:col-span-1 text-center p-5 border-2 border-min-ink text-min-ink hover:bg-min-ink/5 transition-all font-bold text-xs uppercase tracking-[0.2em] focus:outline-none shadow-sm flex items-center justify-center gap-3"
-            >
-              <RotateCcw size={16} /> Wipe
-            </button>
-          </section>
         </div>
       </div>
     </div>

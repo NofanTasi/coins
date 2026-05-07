@@ -4,10 +4,10 @@
 @theme {
   --font-mono: "Courier Prime", "Courier New", Courier, monospace;
 
-  --color-min-bg: #d4d4d4; /* Light gray background */
-  --color-min-ink: #0a0a0a;
-  --color-min-dim: #a3a3a3;
-  --color-min-alert: #525252;
+  --color-min-bg: #171717; /* Dark gray background default */
+  --color-min-ink: #e5e5e5;
+  --color-min-dim: #404040;
+  --color-min-alert: #a3a3a3;
 }
 
 body {
@@ -16,14 +16,6 @@ body {
   font-family: var(--font-mono);
   margin: 0;
   overflow-y: auto;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-body.dark {
-  --color-min-bg: #171717; /* Dark gray background */
-  --color-min-ink: #e5e5e5;
-  --color-min-dim: #404040;
-  --color-min-alert: #a3a3a3;
 }
 
 input[type="range"] {
