@@ -2,6 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap');
 
 @theme {
+  --font-sans: "Courier Prime", "Courier New", Courier, monospace;
   --font-mono: "Courier Prime", "Courier New", Courier, monospace;
 
   --color-min-bg: #171717; /* Dark gray background default */
@@ -10,10 +11,13 @@
   --color-min-alert: #a3a3a3;
 }
 
+* {
+  font-family: var(--font-mono) !important;
+}
+
 body {
   background-color: var(--color-min-bg);
   color: var(--color-min-ink);
-  font-family: var(--font-mono);
   margin: 0;
   overflow-y: auto;
 }

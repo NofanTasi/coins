@@ -126,12 +126,12 @@ const Cell: FC<CellProps> = ({
             ease: "easeInOut",
             repeat: 1
           } : { duration: 0 }}
-          className={`w-4/5 h-4/5 border-2 border-current rounded-full ${isViolation ? 'bg-min-bg' : 'bg-current'} transition-colors duration-300 flex items-center justify-center shadow-lg relative z-10 shrink-0 aspect-square cursor-grab active:cursor-grabbing ${isDragging ? 'opacity-0' : ''}`} 
+          className={`w-4/5 h-4/5 border-2 border-current rounded-full ${isViolation ? 'bg-min-bg' : 'bg-current'} transition-colors duration-300 flex items-center justify-center shadow-lg relative z-10 shrink-0 aspect-square cursor-grab active:cursor-grabbing touch-none ${isDragging ? 'opacity-0' : ''}`} 
         >
           {isSelected && !isViolation && showNeighbors && (
             <span 
               style={{ fontSize: `${dynamicFontSize}px` }}
-              className="font-medium leading-none text-black pointer-events-none"
+              className="font-bold leading-none text-black pointer-events-none"
             >
               {neighborCount}
             </span>
@@ -139,7 +139,7 @@ const Cell: FC<CellProps> = ({
           {isSelected && isViolation && showExcess && (
             <span 
               style={{ fontSize: `${dynamicFontSize}px` }}
-              className="text-current font-medium leading-none pointer-events-none"
+              className="text-current font-bold leading-none pointer-events-none"
             >
               {excessCount}
             </span>
@@ -154,7 +154,7 @@ const Cell: FC<CellProps> = ({
               <motion.span 
                 animate={{ opacity: [1, 0, 1] }}
                 transition={{ repeat: Infinity, duration: 0.6, ease: "linear" }}
-                className="text-white font-black text-6xl pointer-events-none drop-shadow-[0_0_2px_rgba(0,0,0,1)]"
+                className="text-white font-bold text-6xl pointer-events-none drop-shadow-[0_0_2px_rgba(0,0,0,1)]"
               >
                 ×
               </motion.span>
@@ -170,7 +170,7 @@ const Cell: FC<CellProps> = ({
         >
           <span 
             style={{ fontSize: `${dynamicFontSize}px` }}
-            className="font-medium opacity-40 leading-none group-hover:opacity-80 transition-opacity pointer-events-none"
+            className="font-bold opacity-40 leading-none group-hover:opacity-80 transition-opacity pointer-events-none"
           >
             {remainingCount}
           </span>
@@ -186,7 +186,7 @@ const Cell: FC<CellProps> = ({
               <motion.span 
                 animate={{ opacity: [1, 0.4, 1], scale: [1, 1.2, 1] }}
                 transition={{ repeat: Infinity, duration: 0.8, ease: "easeInOut" }}
-                className="text-current font-black text-6xl pointer-events-none"
+                className="text-current font-bold text-6xl pointer-events-none"
               >
                 +
               </motion.span>
@@ -668,15 +668,15 @@ export default function App() {
         <aside className="w-full max-w-2xl flex flex-col gap-8 shrink-0">
           <header className="flex justify-between items-start">
             <div>
-              <h1 className="text-4xl md:text-6xl font-black tracking-tighter leading-none mb-2 uppercase">COIN PLACEMENT</h1>
+              <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-none mb-2 uppercase">COIN PLACEMENT</h1>
               <div className="flex items-center gap-3 opacity-40">
-                <span className="text-[10px] font-black tracking-widest uppercase">Version 1.5.2</span>
+                <span className="text-[10px] font-bold tracking-widest uppercase">Version 1.5.3</span>
                 <button 
                   onClick={() => window.location.reload()}
                   className="flex items-center gap-1 hover:opacity-100 transition-opacity"
                 >
                   <RefreshCcw size={10} />
-                  <span className="text-[10px] font-black tracking-widest uppercase underline underline-offset-2">Update</span>
+                  <span className="text-[10px] font-bold tracking-widest uppercase underline underline-offset-2">Update</span>
                 </button>
               </div>
             </div>
@@ -684,8 +684,8 @@ export default function App() {
 
           <section className="space-y-6 py-6 border-y-2 border-current">
             <div className="flex items-center gap-4 w-full">
-              <span className="text-[10px] md:text-sm font-black tracking-widest opacity-40 uppercase">Elapsed</span>
-              <span className="text-3xl md:text-4xl leading-none tabular-nums font-black ml-auto">{formatTime(time)}</span>
+              <span className="text-[10px] md:text-sm font-bold tracking-widest opacity-40 uppercase">Elapsed</span>
+              <span className="text-3xl md:text-4xl leading-none tabular-nums font-bold ml-auto">{formatTime(time)}</span>
               <div className="flex gap-1 ml-4">
                 <button 
                   onClick={() => setTimerActive(!timerActive)}
@@ -704,8 +704,8 @@ export default function App() {
 
             <div className="space-y-4">
               <div className="flex flex-col items-center">
-                <span className="text-[10px] font-black tracking-widest opacity-40 uppercase">Number</span>
-                <span className="text-3xl font-black tabular-nums">{n}</span>
+                <span className="text-[10px] font-bold tracking-widest opacity-40 uppercase">Number</span>
+                <span className="text-3xl font-bold tabular-nums">{n}</span>
               </div>
               <input 
                 type="range" min="2" max="32" value={n} 
@@ -722,8 +722,8 @@ export default function App() {
 
             <div className="space-y-4">
               <div className="flex flex-col items-center">
-                <span className="text-[10px] font-black tracking-widest opacity-40 uppercase">Coins</span>
-                <span className="text-3xl font-black tabular-nums">{c}</span>
+                <span className="text-[10px] font-bold tracking-widest opacity-40 uppercase">Coins</span>
+                <span className="text-3xl font-bold tabular-nums">{c}</span>
               </div>
               <input 
                 type="range" min="1" max={n} value={c} 
@@ -740,8 +740,8 @@ export default function App() {
 
             <div className="space-y-4 pt-4">
               <div className="flex justify-between items-end">
-                <span className="text-[10px] font-black tracking-widest opacity-40 uppercase">Zoom</span>
-                <span className="text-sm font-black tabular-nums">{Math.round(zoom * 100)}%</span>
+                <span className="text-[10px] font-bold tracking-widest opacity-40 uppercase">Zoom</span>
+                <span className="text-sm font-bold tabular-nums">{Math.round(zoom * 100)}%</span>
               </div>
               <div className="flex items-center gap-4">
                 <Minus size={14} className="opacity-40" />
@@ -761,14 +761,14 @@ export default function App() {
               <button 
                 onClick={undo}
                 disabled={historyIndex <= 0}
-                className="w-[calc(50%-4px)] flex items-center justify-center gap-2 p-3 border-2 border-current hover:bg-current hover:text-min-bg disabled:opacity-20 disabled:pointer-events-none transition-all font-black text-[10px] uppercase tracking-widest"
+                className="w-[calc(50%-4px)] flex items-center justify-center gap-2 p-3 border-2 border-current hover:bg-current hover:text-min-bg disabled:opacity-20 disabled:pointer-events-none transition-all font-bold text-[10px] uppercase tracking-widest"
               >
                 <Undo2 size={12} /> Undo
               </button>
               <button 
                 onClick={redo}
                 disabled={historyIndex >= history.length - 1}
-                className="w-[calc(50%-4px)] flex items-center justify-center gap-2 p-3 border-2 border-current hover:bg-current hover:text-min-bg disabled:opacity-20 disabled:pointer-events-none transition-all font-black text-[10px] uppercase tracking-widest"
+                className="w-[calc(50%-4px)] flex items-center justify-center gap-2 p-3 border-2 border-current hover:bg-current hover:text-min-bg disabled:opacity-20 disabled:pointer-events-none transition-all font-bold text-[10px] uppercase tracking-widest"
               >
                 Redo <Redo2 size={12} />
               </button>
@@ -777,25 +777,25 @@ export default function App() {
             <div className="flex flex-wrap justify-center gap-2">
               <button 
                 onClick={() => setShowAllHazards(!showAllHazards)}
-                className={`w-[calc(50%-4px)] flex items-center justify-center p-3 border-2 transition-all font-black text-[10px] uppercase tracking-widest ${showAllHazards ? 'bg-neutral-800 text-neutral-100 border-neutral-800 shadow-inner' : 'border-neutral-200 text-neutral-400 hover:bg-neutral-50 hover:text-neutral-600'}`}
+                className={`w-[calc(50%-4px)] flex items-center justify-center p-3 border-2 transition-all font-bold text-[10px] uppercase tracking-widest ${showAllHazards ? 'bg-neutral-800 text-neutral-100 border-neutral-800 shadow-inner' : 'border-neutral-200 text-neutral-400 hover:bg-neutral-50 hover:text-neutral-600'}`}
               >
                 Affect
               </button>
               <button 
                 onClick={() => setShowNeighbors(!showNeighbors)}
-                className={`w-[calc(50%-4px)] flex items-center justify-center p-3 border-2 transition-all font-black text-[10px] uppercase tracking-widest ${showNeighbors ? 'bg-min-ink text-min-bg border-min-ink shadow-inner' : 'border-min-ink/30 text-min-ink hover:bg-min-ink/5'}`}
+                className={`w-[calc(50%-4px)] flex items-center justify-center p-3 border-2 transition-all font-bold text-[10px] uppercase tracking-widest ${showNeighbors ? 'bg-min-ink text-min-bg border-min-ink shadow-inner' : 'border-min-ink/30 text-min-ink hover:bg-min-ink/5'}`}
               >
                 Neighbors
               </button>
               <button 
                 onClick={() => setShowExcess(!showExcess)}
-                className={`w-[calc(50%-4px)] flex items-center justify-center p-3 border-2 transition-all font-black text-[10px] uppercase tracking-widest ${showExcess ? 'bg-min-ink text-min-bg border-min-ink shadow-inner' : 'border-min-ink/30 text-min-ink hover:bg-min-ink/5'}`}
+                className={`w-[calc(50%-4px)] flex items-center justify-center p-3 border-2 transition-all font-bold text-[10px] uppercase tracking-widest ${showExcess ? 'bg-min-ink text-min-bg border-min-ink shadow-inner' : 'border-min-ink/30 text-min-ink hover:bg-min-ink/5'}`}
               >
                 Excess
               </button>
               <button 
                 onClick={() => setShowRemaining(!showRemaining)}
-                className={`w-[calc(50%-4px)] flex items-center justify-center p-3 border-2 transition-all font-black text-[10px] uppercase tracking-widest ${showRemaining ? 'bg-min-ink text-min-bg border-min-ink shadow-inner' : 'border-min-ink/30 text-min-ink hover:bg-min-ink/5'}`}
+                className={`w-[calc(50%-4px)] flex items-center justify-center p-3 border-2 transition-all font-bold text-[10px] uppercase tracking-widest ${showRemaining ? 'bg-min-ink text-min-bg border-min-ink shadow-inner' : 'border-min-ink/30 text-min-ink hover:bg-min-ink/5'}`}
               >
                 Remaining
               </button>
@@ -805,26 +805,26 @@ export default function App() {
               <button 
                 disabled={isSolving}
                 onClick={handleSolve}
-                className={`w-[calc(50%-4px)] flex items-center justify-center p-3 border-2 transition-all font-black text-[10px] uppercase tracking-widest shadow-sm ${isSolving ? 'opacity-50 cursor-wait bg-min-ink text-min-bg' : 'border-min-ink text-min-ink hover:bg-min-ink/10'}`}
+                className={`w-[calc(50%-4px)] flex items-center justify-center p-3 border-2 transition-all font-bold text-[10px] uppercase tracking-widest shadow-sm ${isSolving ? 'opacity-50 cursor-wait bg-min-ink text-min-bg' : 'border-min-ink text-min-ink hover:bg-min-ink/10'}`}
               >
                 {isSolving ? '...' : 'Solve'}
               </button>
               <button 
                 onClick={handleHint}
                 disabled={isSolved || isSolving}
-                className={`w-[calc(50%-4px)] flex items-center justify-center p-3 border-2 transition-all font-black text-[10px] uppercase tracking-widest shadow-sm ${isSolved || isSolving ? 'opacity-20 cursor-not-allowed border-current/20' : 'border-current text-current hover:bg-current/10'}`}
+                className={`w-[calc(50%-4px)] flex items-center justify-center p-3 border-2 transition-all font-bold text-[10px] uppercase tracking-widest shadow-sm ${isSolved || isSolving ? 'opacity-20 cursor-not-allowed border-current/20' : 'border-current text-current hover:bg-current/10'}`}
               >
                 Hint
               </button>
               <button 
                 onClick={handleRandomBoard}
-                className="w-[calc(50%-4px)] flex items-center justify-center gap-2 p-3 border-2 border-min-ink text-min-ink hover:bg-min-ink/10 transition-all font-black text-[10px] uppercase tracking-widest shadow-sm"
+                className="w-[calc(50%-4px)] flex items-center justify-center gap-2 p-3 border-2 border-min-ink text-min-ink hover:bg-min-ink/10 transition-all font-bold text-[10px] uppercase tracking-widest shadow-sm"
               >
                 <Dice5 size={12} /> Random
               </button>
               <button 
                 onClick={() => { pushToHistory(new Set()); setLastActionPos(null); setTime(0); setTimerActive(false); }}
-                className="w-[calc(50%-4px)] flex items-center justify-center p-3 border-2 border-min-ink text-min-ink hover:bg-min-ink/10 transition-all font-black text-[10px] uppercase tracking-widest shadow-sm"
+                className="w-[calc(50%-4px)] flex items-center justify-center p-3 border-2 border-min-ink text-min-ink hover:bg-min-ink/10 transition-all font-bold text-[10px] uppercase tracking-widest shadow-sm"
               >
                 Wipe
               </button>
@@ -837,16 +837,16 @@ export default function App() {
           <div className="w-full max-w-2xl px-4 mb-4">
             <div className="grid grid-cols-3 gap-1 border-2 border-current bg-min-bg shadow-sm overflow-hidden">
               <div className="flex flex-col items-center p-3 border-r-2 border-current last:border-r-0">
-                <span className="text-[10px] font-black tracking-widest opacity-40 uppercase mb-1">Valid</span>
-                <span className="text-2xl font-black tabular-nums">{board.size - violations.length}</span>
+                <span className="text-[10px] font-bold tracking-widest opacity-40 uppercase mb-1">Valid</span>
+                <span className="text-2xl font-bold tabular-nums">{board.size - violations.length}</span>
               </div>
               <div className="flex flex-col items-center p-3 border-r-2 border-current last:border-r-0 bg-current/5">
-                <span className="text-[10px] font-black tracking-widest opacity-40 uppercase mb-1">Invalid</span>
-                <span className="text-2xl font-black tabular-nums">{violations.length}</span>
+                <span className="text-[10px] font-bold tracking-widest opacity-40 uppercase mb-1">Invalid</span>
+                <span className="text-2xl font-bold tabular-nums">{violations.length}</span>
               </div>
               <div className="flex flex-col items-center p-3 border-r-2 border-current last:border-r-0">
-                <span className="text-[10px] font-black tracking-widest opacity-40 uppercase mb-1">Goal</span>
-                <span className="text-2xl font-black tabular-nums">{n * c}</span>
+                <span className="text-[10px] font-bold tracking-widest opacity-40 uppercase mb-1">Goal</span>
+                <span className="text-2xl font-bold tabular-nums">{n * c}</span>
               </div>
             </div>
           </div>
