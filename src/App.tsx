@@ -405,7 +405,7 @@ export default function App() {
             <div className="flex flex-col items-center">
               <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-none mb-2 uppercase text-center">COIN PLACEMENT</h1>
               <div className="flex items-center justify-center gap-3 opacity-40">
-                <span className="text-[10px] font-bold tracking-widest uppercase">Version 1.6.6</span>
+                <span className="text-[10px] font-bold tracking-widest uppercase">Version 1.6.7</span>
                 <button 
                   onClick={() => window.location.reload()}
                   className="flex items-center gap-1 hover:opacity-100 transition-opacity"
@@ -430,7 +430,7 @@ export default function App() {
                     if (c > val) setC(val);
                     pushToHistory(new Set()); setTime(0); setTimerActive(false);
                   }}
-                  className="p-2 border-2 border-current hover:bg-current hover:text-min-bg transition-colors"
+                  className="p-2 border-2 border-current transition-colors"
                 >
                   <Minus size={16} />
                 </button>
@@ -452,7 +452,7 @@ export default function App() {
                     setN(val); 
                     pushToHistory(new Set()); setTime(0); setTimerActive(false);
                   }}
-                  className="p-2 border-2 border-current hover:bg-current hover:text-min-bg transition-colors"
+                  className="p-2 border-2 border-current transition-colors"
                 >
                   <Plus size={16} />
                 </button>
@@ -470,7 +470,7 @@ export default function App() {
                     setC(val);
                     pushToHistory(new Set()); setTime(0); setTimerActive(false);
                   }}
-                  className="p-2 border-2 border-current hover:bg-current hover:text-min-bg transition-colors"
+                  className="p-2 border-2 border-current transition-colors"
                 >
                   <Minus size={16} />
                 </button>
@@ -491,7 +491,7 @@ export default function App() {
                     setC(val);
                     pushToHistory(new Set()); setTime(0); setTimerActive(false);
                   }}
-                  className="p-2 border-2 border-current hover:bg-current hover:text-min-bg transition-colors"
+                  className="p-2 border-2 border-current transition-colors"
                 >
                   <Plus size={16} />
                 </button>
@@ -500,7 +500,7 @@ export default function App() {
 
             <div className="space-y-4">
               <div className="flex items-center justify-center gap-4 text-center">
-                <button onClick={fitToScreen} className="p-2 hover:bg-current/10 border-2 border-current transition-colors">
+                <button onClick={fitToScreen} className="p-2 border-2 border-current transition-colors">
                   <Maximize size={16} />
                 </button>
                 <span className="text-xl font-bold tracking-tight uppercase">ZOOM : {Math.round(zoom * 100)}%</span>
@@ -508,7 +508,7 @@ export default function App() {
               <div className="flex items-center gap-4">
                 <button 
                   onClick={() => setZoom(Math.max(0.5, zoom - 0.1))}
-                  className="p-2 border-2 border-current hover:bg-current hover:text-min-bg transition-colors"
+                  className="p-2 border-2 border-current transition-colors"
                 >
                   <Minus size={16} />
                 </button>
@@ -519,7 +519,7 @@ export default function App() {
                 />
                 <button 
                   onClick={() => setZoom(Math.min(3, zoom + 0.1))}
-                  className="p-2 border-2 border-current hover:bg-current hover:text-min-bg transition-colors"
+                  className="p-2 border-2 border-current transition-colors"
                 >
                   <Plus size={16} />
                 </button>
@@ -640,13 +640,13 @@ export default function App() {
               <div className="flex gap-2 justify-center">
                 <button 
                   onClick={() => setTimerActive(!timerActive)}
-                  className="p-2 border-2 border-current hover:bg-current hover:text-min-bg transition-colors"
+                  className="p-2 border-2 border-current transition-colors"
                 >
                   {timerActive ? <Pause size={16} /> : <Play size={16} />}
                 </button>
                 <button 
                   onClick={() => { setTimerActive(false); setTime(0); }}
-                  className="p-2 border-2 border-current hover:bg-current hover:text-min-bg transition-colors"
+                  className="p-2 border-2 border-current transition-colors"
                 >
                   <Square size={16} />
                 </button>
