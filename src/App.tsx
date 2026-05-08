@@ -405,7 +405,7 @@ export default function App() {
             <div className="flex flex-col items-center">
               <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-none mb-2 uppercase text-center">COIN PLACEMENT</h1>
               <div className="flex items-center justify-center gap-3 opacity-40">
-                <span className="text-[10px] font-bold tracking-widest uppercase">Version 1.6.5</span>
+                <span className="text-[10px] font-bold tracking-widest uppercase">Version 1.6.6</span>
                 <button 
                   onClick={() => window.location.reload()}
                   className="flex items-center gap-1 hover:opacity-100 transition-opacity"
@@ -530,14 +530,14 @@ export default function App() {
               <button 
                 onClick={undo}
                 disabled={historyIndex <= 0}
-                className="w-[calc(50%-4px)] flex items-center justify-center gap-2 p-4 border-2 border-current hover:bg-current hover:text-min-bg disabled:opacity-20 disabled:pointer-events-none transition-all font-bold text-xl uppercase tracking-widest"
+                className="w-[calc(50%-4px)] flex items-center justify-center gap-2 p-4 border-2 border-current disabled:opacity-20 disabled:pointer-events-none transition-all font-bold text-xl uppercase tracking-widest"
               >
                 <Undo2 size={20} /> Undo
               </button>
               <button 
                 onClick={redo}
                 disabled={historyIndex >= history.length - 1}
-                className="w-[calc(50%-4px)] flex items-center justify-center gap-2 p-4 border-2 border-current hover:bg-current hover:text-min-bg disabled:opacity-20 disabled:pointer-events-none transition-all font-bold text-xl uppercase tracking-widest"
+                className="w-[calc(50%-4px)] flex items-center justify-center gap-2 p-4 border-2 border-current disabled:opacity-20 disabled:pointer-events-none transition-all font-bold text-xl uppercase tracking-widest"
               >
                 Redo <Redo2 size={20} />
               </button>
@@ -546,9 +546,9 @@ export default function App() {
             <div className="flex flex-wrap justify-center gap-2">
               <button 
                 onClick={() => setShowAllHazards(!showAllHazards)}
-                className={`w-[calc(50%-4px)] flex items-center justify-center p-4 border-2 transition-all font-bold text-xl uppercase tracking-widest ${showAllHazards ? 'bg-neutral-800 text-neutral-100 border-neutral-800 shadow-inner' : 'border-neutral-200 text-neutral-400 hover:bg-neutral-50 hover:text-neutral-600'}`}
+                className={`w-[calc(50%-4px)] flex items-center justify-center p-4 border-2 transition-all font-bold text-xl uppercase tracking-widest ${showAllHazards ? 'bg-min-ink text-min-bg border-min-ink shadow-inner' : 'border-min-ink/30 text-min-ink hover:bg-min-ink/5'}`}
               >
-                Affect
+                Hover
               </button>
               <button 
                 onClick={() => setShowNeighbors(!showNeighbors)}
