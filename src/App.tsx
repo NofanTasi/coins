@@ -3,12 +3,22 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useCallback, useEffect, useMemo, useRef, FC } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { 
+  DndContext, 
+  DragEndEvent, 
+  useDraggable, 
+  useDroppable,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import { restrictToWindowEdges } from '@dnd-kit/modifiers';
 import { 
   Minus, Plus, Maximize, RotateCcw, 
   Undo2, Redo2, Play, Pause, Square,
-  RefreshCcw
+  RefreshCcw, Dice5
 } from 'lucide-react';
 import { 
   BoardState, 
@@ -18,6 +28,180 @@ import {
   getViolations,
 } from './lib/gridUtils';
 import { findSolution } from './lib/solver';
+
+interface CellProps {
+  r: number;
+  cl: number;
+  n: number;
+  c: number;
+  board: BoardState;
+  violations: string[];
+  hint: { type: 'add' | 'remove' | 'move'; pos?: string, from?: string, to?: string } | null;
+  isHazardous: (r: number, cl: number) => boolean;
+  showNeighbors: boolean;
+  showExcess: boolean;
+  showRemaining: boolean;
+  justSolved: boolean;
+  toggleCoin: (r: number, cl: number) => void;
+  moveCoin: (from: string, to: string) => void;
+  setHoveredPos: (pos: string | null) => void;
+  setHint: (hint: any) => void;
+}
+
+const Cell: FC<CellProps> = ({ 
+  r, cl, n, c, board, violations, hint, isHazardous, 
+  showNeighbors, showExcess, showRemaining, justSolved, 
+  toggleCoin, moveCoin, setHoveredPos, setHint 
+}) => {
+  const pos = `${r},${cl}`;
+  const isSelected = board.has(pos);
+  const { setNodeRef: setDroppableRef, isOver } = useDroppable({ id: pos });
+  const { attributes, listeners, setNodeRef: setDraggableRef, transform, isDragging } = useDraggable({
+    id: pos,
+    disabled: !isSelected
+  });
+
+  const isViolation = violations.includes(pos);
+  const isHintAdd = hint?.type === 'add' && hint?.pos === pos;
+  const isHintRemove = hint?.type === 'remove' && hint?.pos === pos;
+  const isHintMoveFrom = hint?.type === 'move' && hint?.from === pos;
+  const isHintMoveTo = hint?.type === 'move' && hint?.to === pos;
+  
+  const handleHintClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (isHintAdd) {
+      toggleCoin(r, cl);
+      setHint(null);
+    } else if (isHintRemove) {
+      toggleCoin(r, cl);
+      setHint(null);
+    } else if (isHintMoveFrom || isHintMoveTo) {
+      // Execute the move immediately
+      if (hint?.from && hint?.to) {
+        moveCoin(hint.from, hint.to);
+        setHint(null);
+      }
+    }
+  };
+  
+  const isCellHazard = isHazardous(r, cl);
+  const neighborCount = getNeighborCount(r, cl, n, board);
+  const excessCount = getExcessCount(r, cl, c, board);
+  const remainingCount = getRemainingCount(r, cl, c, board);
+  const dynamicFontSize = Math.min(64, Math.max(14, (600 / n) * 0.35));
+
+  const style = transform ? {
+    transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+    zIndex: 100,
+    cursor: 'grabbing'
+  } : undefined;
+
+  return (
+    <div
+      ref={setDroppableRef}
+      onMouseEnter={() => setHoveredPos(pos)}
+      onMouseLeave={() => setHoveredPos(null)}
+      className={`border border-current/10 flex items-center justify-center transition-colors relative h-full w-full overflow-hidden p-0 m-0 box-border group aspect-square ${isOver ? 'bg-current/20' : 'hover:bg-current/10'}`}
+    >
+      {/* Hazard Overlay */}
+      {isCellHazard && (
+        <div className="absolute inset-0 bg-neutral-200/50 z-0 pointer-events-none" />
+      )}
+
+      {isSelected && (
+        <motion.div 
+          ref={setDraggableRef}
+          {...listeners}
+          {...attributes}
+          style={style}
+          onClick={(e) => { e.stopPropagation(); toggleCoin(r, cl); setHint(null); }}
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={justSolved ? {
+            filter: ['invert(0)', 'invert(1)', 'invert(0)'],
+            scale: 1,
+            opacity: 1
+          } : { scale: 1, opacity: 1, filter: 'invert(0)' }}
+          transition={justSolved ? { 
+            duration: 0.6,
+            ease: "easeInOut",
+            repeat: 1
+          } : { duration: 0 }}
+          className={`w-4/5 h-4/5 border-2 border-current rounded-full ${isViolation ? 'bg-min-bg' : 'bg-current'} transition-colors duration-300 flex items-center justify-center shadow-lg relative z-10 shrink-0 aspect-square cursor-grab active:cursor-grabbing ${isDragging ? 'opacity-0' : ''}`} 
+        >
+          {isSelected && !isViolation && showNeighbors && (
+            <span 
+              style={{ fontSize: `${dynamicFontSize}px` }}
+              className="font-medium leading-none text-black pointer-events-none"
+            >
+              {neighborCount}
+            </span>
+          )}
+          {isSelected && isViolation && showExcess && (
+            <span 
+              style={{ fontSize: `${dynamicFontSize}px` }}
+              className="text-current font-medium leading-none pointer-events-none"
+            >
+              {excessCount}
+            </span>
+          )}
+          
+          {/* Hint Overlay for removals */}
+          {(isHintRemove || isHintMoveFrom) && (
+            <div 
+              onClick={handleHintClick}
+              className="absolute inset-0 flex items-center justify-center z-50 cursor-pointer"
+            >
+              <motion.span 
+                animate={{ opacity: [1, 0, 1] }}
+                transition={{ repeat: Infinity, duration: 0.6, ease: "linear" }}
+                className="text-white font-black text-6xl pointer-events-none drop-shadow-[0_0_2px_rgba(0,0,0,1)]"
+              >
+                ×
+              </motion.span>
+            </div>
+          )}
+        </motion.div>
+      )}
+
+      {!isSelected && showRemaining && (
+        <button 
+          onClick={() => { toggleCoin(r, cl); setHint(null); }}
+          className="w-full h-full flex items-center justify-center"
+        >
+          <span 
+            style={{ fontSize: `${dynamicFontSize}px` }}
+            className="font-medium opacity-40 leading-none group-hover:opacity-80 transition-opacity pointer-events-none"
+          >
+            {remainingCount}
+          </span>
+        </button>
+      )}
+
+          {/* Hint Overlay for additions */}
+          {(isHintAdd || isHintMoveTo) && (
+            <div 
+              onClick={handleHintClick}
+              className="absolute inset-0 flex items-center justify-center z-50 cursor-pointer pointer-events-auto"
+            >
+              <motion.span 
+                animate={{ opacity: [1, 0.4, 1], scale: [1, 1.2, 1] }}
+                transition={{ repeat: Infinity, duration: 0.8, ease: "easeInOut" }}
+                className="text-current font-black text-6xl pointer-events-none"
+              >
+                +
+              </motion.span>
+            </div>
+          )}
+
+      {!isSelected && !showRemaining && !isHintAdd && !isHintMoveTo && (
+         <button 
+          onClick={() => { toggleCoin(r, cl); setHint(null); }}
+          className="w-full h-full"
+        />
+      )}
+    </div>
+  );
+}
 
 export default function App() {
   const [n, setN] = useState<number>(5);
@@ -42,23 +226,36 @@ export default function App() {
   const [showExcess, setShowExcess] = useState(false);
   const [showRemaining, setShowRemaining] = useState(false);
   const [isSolving, setIsSolving] = useState(false);
-  const [hint, setHint] = useState<{ type: 'add' | 'remove'; pos: string } | null>(null);
+  const [hint, setHint] = useState<{ type: 'add' | 'remove' | 'move'; pos?: string, from?: string, to?: string } | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    })
+  );
 
   const violations = useMemo(() => getViolations(c, board), [board, c]);
   const isSolved = useMemo(() => board.size === (n * c) && violations.length === 0, [board.size, n, c, violations.length]);
+  const isFullCount = useMemo(() => board.size === (n * c), [board.size, n, c]);
   const [justSolved, setJustSolved] = useState(false);
   const [lastActionPos, setLastActionPos] = useState<string | null>(null);
 
-  // Celebration effect when solved
+  // Celebration effect when solved (including manual moves)
   useEffect(() => {
-    if (isSolved) {
+    if (isSolved && board.size > 0) {
       setJustSolved(true);
-      // Auto-turn off justSolved after animation finishes
-      const timer = setTimeout(() => setJustSolved(false), 4000);
-      return () => clearTimeout(timer);
+      const timer = setTimeout(() => setJustSolved(false), 2000);
+      return () => {
+        clearTimeout(timer);
+        setJustSolved(false);
+      };
+    } else {
+      setJustSolved(false);
     }
-  }, [isSolved]);
+  }, [isSolved, board.size]);
 
   // Timer effect
   useEffect(() => {
@@ -164,26 +361,223 @@ export default function App() {
   const handleHint = () => {
     if (isSolving) return;
 
-    // Use findSolution as a source of truth for the randomized hint
-    // Since findSolution is randomized, it will suggest variations each time
-    const anySolution = findSolution(n, c);
-    if (anySolution) {
-      // 1. Identify coins that are on board but shouldn't be in THAT solution
-      const surplus = [...board].filter(key => !anySolution.has(key));
-      if (surplus.length > 0) {
-        // Suggested removal
-        setHint({ type: 'remove', pos: surplus[Math.floor(Math.random() * surplus.length)] });
-      } else {
-        // 2. Identify coins that are missing compared to our target solution
-        const missing = [...anySolution].filter(key => !board.has(key));
+    // Toggle: if hint is already active, clear it
+    if (hint) {
+      setHint(null);
+      return;
+    }
+
+    const currentSize = board.size;
+    const targetSize = n * c;
+
+    // Strategy 1: If we have too few coins, prioritize adding.
+    if (currentSize < targetSize) {
+      const allAdditions: { pos: string, rem: number }[] = [];
+      const rowCounts = new Array(n).fill(0);
+      board.forEach(key => {
+        const r = parseInt(key.split(',')[0]);
+        rowCounts[r]++;
+      });
+
+      // Find ALL empty spots across the board that can take a coin
+      for (let r = 0; r < n; r++) {
+        for (let cl = 0; cl < n; cl++) {
+          const pos = `${r},${cl}`;
+          if (!board.has(pos)) {
+            const rem = getRemainingCount(r, cl, c, board);
+            // We only consider additions that don't violate ANY constraint immediately (rem >= 1).
+            // However, we MUST prioritize rows that are under-full.
+            const isUnderRow = rowCounts[r] < c;
+            if (isUnderRow && rem >= 1) {
+              allAdditions.push({ pos, rem });
+            }
+          }
+        }
+      }
+
+      if (allAdditions.length > 0) {
+        // Sort by rem desc (most safe spot), then randomly among best
+        allAdditions.sort((a, b) => b.rem - a.rem);
+        const best = allAdditions.filter(a => a.rem === allAdditions[0].rem);
+        setHint({ type: 'add', pos: best[Math.floor(Math.random() * best.length)].pos });
+        return;
+      }
+
+      // If no "safe" spots found (rem >= 1), use solution-based addition
+      const solution = findSolution(n, c);
+      if (solution) {
+        const missing = [...solution].filter(key => !board.has(key));
         if (missing.length > 0) {
+          // Double check: if we add a coin from solution, even if it violates, it's progress
           setHint({ type: 'add', pos: missing[Math.floor(Math.random() * missing.length)] });
+          return;
+        }
+      }
+
+      // Final fallback: just add anywhere in an under-full row
+      for (let r = 0; r < n; r++) {
+        if (rowCounts[r] < c) {
+          for (let cl = 0; cl < n; cl++) {
+            if (!board.has(`${r},${cl}`)) {
+              setHint({ type: 'add', pos: `${r},${cl}` });
+              return;
+            }
+          }
         }
       }
     }
-    
-    // Auto-hide hint after delay
-    setTimeout(() => setHint(null), 3500);
+
+    // Strategy 2: If we have too many coins, prioritize removing.
+    if (currentSize > targetSize) {
+      const allRemovals: { pos: string, excess: number }[] = [];
+      const rowCounts = new Array(n).fill(0);
+      board.forEach(key => {
+        const r = parseInt(key.split(',')[0]);
+        rowCounts[r]++;
+      });
+
+      board.forEach((pos: string) => {
+        const [r, cl] = pos.split(',').map(Number);
+        // Prioritize coins in rows that are over-full, OR any coin with excess
+        if (rowCounts[r] > c || violations.includes(pos)) {
+          allRemovals.push({ pos, excess: getExcessCount(r, cl, c, board) });
+        }
+      });
+
+      if (allRemovals.length > 0) {
+        // Sort by excess desc (most problematic coin first)
+        allRemovals.sort((a, b) => b.excess - a.excess);
+        const maxExcess = allRemovals[0].excess;
+        const best = allRemovals.filter(r => r.excess === maxExcess);
+        setHint({ type: 'remove', pos: best[Math.floor(Math.random() * best.length)].pos });
+        return;
+      }
+    }
+
+    // Strategy 3: Correct count but not solved (must move).
+    if (currentSize === targetSize && !isSolved) {
+      // Prioritize moves that reduce total conflicts
+      const currentConflicts = violations.length;
+      
+      // Rank violation cells by their excess count before moving
+      const violationCells = Array.from(violations).map((pos: string) => {
+        const [r, cl] = pos.split(',').map(Number);
+        return { pos, excess: getExcessCount(r, cl, c, board) };
+      });
+      
+      // Sort by excess desc
+      violationCells.sort((a, b) => b.excess - a.excess);
+
+      const emptyCells: string[] = [];
+      for (let r = 0; r < n; r++) {
+        for (let cl = 0; cl < n; cl++) {
+          const p = `${r},${cl}`;
+          if (!board.has(p)) emptyCells.push(p);
+        }
+      }
+
+      for (const fromObj of violationCells) {
+        const from = fromObj.pos;
+        // Temporarily remove 'from' to evaluate remaining counts accurately
+        const tempBoard = new Set<string>(board);
+        tempBoard.delete(from);
+
+        // Try empty spots, prioritizing those that have positive remaining count AFTER subtraction
+        const candidates = emptyCells.map((to: string) => {
+          const [tr, tc] = to.split(',').map(Number);
+          return { to, rem: getRemainingCount(tr, tc, c, tempBoard) };
+        });
+
+        // 1. First try moves that reduce violations and maintain row/col/diag limits (rem >= 1)
+        for (const cand of candidates) {
+          if (cand.rem >= 1) {
+            const testBoard = new Set<string>(tempBoard);
+            testBoard.add(cand.to);
+            if (getViolations(c, testBoard).length < currentConflicts) {
+              setHint({ type: 'move', from, to: cand.to });
+              return;
+            }
+          }
+        }
+
+        // 2. Fallback: Any move that reduces total conflicts, even if it's still "dirty"
+        for (const cand of candidates) {
+          const testBoard = new Set<string>(tempBoard);
+          testBoard.add(cand.to);
+          if (getViolations(c, testBoard).length < currentConflicts) {
+            setHint({ type: 'move', from, to: cand.to });
+            return;
+          }
+        }
+      }
+
+      // Fallback: solution-based move
+      const solution = findSolution(n, c);
+      if (solution) {
+        const boardWithExcess = Array.from(board).map((pos: string) => {
+          const [r, cl] = pos.split(',').map(Number);
+          return { pos, excess: getExcessCount(r, cl, c, board), isCorrect: solution.has(pos) };
+        });
+        
+        // Prioritize removing the most "excessive" incorrect coin
+        boardWithExcess.sort((a, b) => b.excess - a.excess);
+        const fromPos = boardWithExcess.find(obj => !obj.isCorrect)?.pos;
+        const toPos = [...solution].find(pos => !board.has(pos));
+        
+        if (fromPos && toPos) {
+          setHint({ type: 'move', from: fromPos, to: toPos });
+          return;
+        }
+      }
+
+      // Final fallback: Any move within same row if possible
+      for (const fromObj of violationCells) {
+        const from = fromObj.pos;
+        const [fr] = from.split(',').map(Number);
+        for (const to of emptyCells) {
+          if (parseInt(to.split(',')[0]) === fr) {
+            setHint({ type: 'move', from, to });
+            return;
+          }
+        }
+      }
+    }
+  };
+
+  const handleRandomBoard = () => {
+    const newBoard = new Set<string>();
+    for (let r = 0; r < n; r++) {
+      const cols = Array.from({ length: n }, (_, i) => i);
+      // Shuffle cols
+      for (let i = cols.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [cols[i], cols[j]] = [cols[j], cols[i]];
+      }
+      // Pick first C columns
+      for (let i = 0; i < c; i++) {
+        newBoard.add(`${r},${cols[i]}`);
+      }
+    }
+    pushToHistory(newBoard);
+    setLastActionPos(null);
+    setHint(null);
+  };
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (over && active.id !== over.id) {
+      const from = active.id as string;
+      const to = over.id as string;
+      
+      const newBoard = new Set(board);
+      if (newBoard.has(from)) {
+        newBoard.delete(from);
+        newBoard.add(to);
+        pushToHistory(newBoard);
+        setLastActionPos(to);
+        setHint(null);
+      }
+    }
   };
 
   // Initial fit and window resize
@@ -215,8 +609,19 @@ export default function App() {
       setLastActionPos(key);
     }
     pushToHistory(newBoard);
-    setJustSolved(false);
-  }, [board, pushToHistory, timerActive, time]);
+    setHint(null);
+  }, [board, pushToHistory]);
+
+  const moveCoin = useCallback((from: string, to: string) => {
+    const newBoard = new Set(board);
+    if (newBoard.has(from)) {
+      newBoard.delete(from);
+      newBoard.add(to);
+      setLastActionPos(to);
+      pushToHistory(newBoard);
+      setHint(null);
+    }
+  }, [board, pushToHistory]);
 
   const hazardSources = useMemo(() => {
     if (showAllHazards && hoveredPos) {
@@ -265,7 +670,7 @@ export default function App() {
             <div>
               <h1 className="text-4xl md:text-6xl font-black tracking-tighter leading-none mb-2 uppercase">COIN PLACEMENT</h1>
               <div className="flex items-center gap-3 opacity-40">
-                <span className="text-[10px] font-black tracking-widest uppercase">Version 1.3.5</span>
+                <span className="text-[10px] font-black tracking-widest uppercase">Version 1.5.2</span>
                 <button 
                   onClick={() => window.location.reload()}
                   className="flex items-center gap-1 hover:opacity-100 transition-opacity"
@@ -352,68 +757,74 @@ export default function App() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-2 pt-4">
+            <div className="flex flex-wrap justify-center gap-2 pt-4">
               <button 
                 onClick={undo}
                 disabled={historyIndex <= 0}
-                className="flex items-center justify-center gap-2 p-3 border-2 border-current hover:bg-current hover:text-min-bg disabled:opacity-20 disabled:pointer-events-none transition-all font-black text-[10px] uppercase tracking-widest"
+                className="w-[calc(50%-4px)] flex items-center justify-center gap-2 p-3 border-2 border-current hover:bg-current hover:text-min-bg disabled:opacity-20 disabled:pointer-events-none transition-all font-black text-[10px] uppercase tracking-widest"
               >
                 <Undo2 size={12} /> Undo
               </button>
               <button 
                 onClick={redo}
                 disabled={historyIndex >= history.length - 1}
-                className="flex items-center justify-center gap-2 p-3 border-2 border-current hover:bg-current hover:text-min-bg disabled:opacity-20 disabled:pointer-events-none transition-all font-black text-[10px] uppercase tracking-widest"
+                className="w-[calc(50%-4px)] flex items-center justify-center gap-2 p-3 border-2 border-current hover:bg-current hover:text-min-bg disabled:opacity-20 disabled:pointer-events-none transition-all font-black text-[10px] uppercase tracking-widest"
               >
                 Redo <Redo2 size={12} />
               </button>
             </div>
 
-            <div className="grid grid-cols-2 gap-2">
+            <div className="flex flex-wrap justify-center gap-2">
               <button 
                 onClick={() => setShowAllHazards(!showAllHazards)}
-                className={`flex items-center justify-center p-3 border-2 transition-all font-black text-[10px] uppercase tracking-widest ${showAllHazards ? 'bg-neutral-800 text-neutral-100 border-neutral-800 shadow-inner' : 'border-neutral-200 text-neutral-400 hover:bg-neutral-50 hover:text-neutral-600'}`}
+                className={`w-[calc(50%-4px)] flex items-center justify-center p-3 border-2 transition-all font-black text-[10px] uppercase tracking-widest ${showAllHazards ? 'bg-neutral-800 text-neutral-100 border-neutral-800 shadow-inner' : 'border-neutral-200 text-neutral-400 hover:bg-neutral-50 hover:text-neutral-600'}`}
               >
                 Affect
               </button>
               <button 
                 onClick={() => setShowNeighbors(!showNeighbors)}
-                className={`flex items-center justify-center p-3 border-2 transition-all font-black text-[10px] uppercase tracking-widest ${showNeighbors ? 'bg-min-ink text-min-bg border-min-ink shadow-inner' : 'border-min-ink/30 text-min-ink hover:bg-min-ink/5'}`}
+                className={`w-[calc(50%-4px)] flex items-center justify-center p-3 border-2 transition-all font-black text-[10px] uppercase tracking-widest ${showNeighbors ? 'bg-min-ink text-min-bg border-min-ink shadow-inner' : 'border-min-ink/30 text-min-ink hover:bg-min-ink/5'}`}
               >
                 Neighbors
               </button>
               <button 
                 onClick={() => setShowExcess(!showExcess)}
-                className={`flex items-center justify-center p-3 border-2 transition-all font-black text-[10px] uppercase tracking-widest ${showExcess ? 'bg-min-ink text-min-bg border-min-ink shadow-inner' : 'border-min-ink/30 text-min-ink hover:bg-min-ink/5'}`}
+                className={`w-[calc(50%-4px)] flex items-center justify-center p-3 border-2 transition-all font-black text-[10px] uppercase tracking-widest ${showExcess ? 'bg-min-ink text-min-bg border-min-ink shadow-inner' : 'border-min-ink/30 text-min-ink hover:bg-min-ink/5'}`}
               >
                 Excess
               </button>
               <button 
                 onClick={() => setShowRemaining(!showRemaining)}
-                className={`flex items-center justify-center p-3 border-2 transition-all font-black text-[10px] uppercase tracking-widest ${showRemaining ? 'bg-min-ink text-min-bg border-min-ink shadow-inner' : 'border-min-ink/30 text-min-ink hover:bg-min-ink/5'}`}
+                className={`w-[calc(50%-4px)] flex items-center justify-center p-3 border-2 transition-all font-black text-[10px] uppercase tracking-widest ${showRemaining ? 'bg-min-ink text-min-bg border-min-ink shadow-inner' : 'border-min-ink/30 text-min-ink hover:bg-min-ink/5'}`}
               >
                 Remaining
               </button>
             </div>
 
-            <div className="grid grid-cols-2 gap-2 pt-2">
+            <div className="flex flex-wrap justify-center gap-2 pt-2">
               <button 
                 disabled={isSolving}
                 onClick={handleSolve}
-                className={`flex items-center justify-center p-3 border-2 transition-all font-black text-[10px] uppercase tracking-widest shadow-sm ${isSolving ? 'opacity-50 cursor-wait bg-min-ink text-min-bg' : 'border-min-ink text-min-ink hover:bg-min-ink/10'}`}
+                className={`w-[calc(50%-4px)] flex items-center justify-center p-3 border-2 transition-all font-black text-[10px] uppercase tracking-widest shadow-sm ${isSolving ? 'opacity-50 cursor-wait bg-min-ink text-min-bg' : 'border-min-ink text-min-ink hover:bg-min-ink/10'}`}
               >
                 {isSolving ? '...' : 'Solve'}
               </button>
               <button 
                 onClick={handleHint}
                 disabled={isSolved || isSolving}
-                className={`flex items-center justify-center p-3 border-2 transition-all font-black text-[10px] uppercase tracking-widest shadow-sm ${isSolved || isSolving ? 'opacity-20 cursor-not-allowed border-current/20' : 'border-current text-current hover:bg-current/10'}`}
+                className={`w-[calc(50%-4px)] flex items-center justify-center p-3 border-2 transition-all font-black text-[10px] uppercase tracking-widest shadow-sm ${isSolved || isSolving ? 'opacity-20 cursor-not-allowed border-current/20' : 'border-current text-current hover:bg-current/10'}`}
               >
                 Hint
               </button>
               <button 
+                onClick={handleRandomBoard}
+                className="w-[calc(50%-4px)] flex items-center justify-center gap-2 p-3 border-2 border-min-ink text-min-ink hover:bg-min-ink/10 transition-all font-black text-[10px] uppercase tracking-widest shadow-sm"
+              >
+                <Dice5 size={12} /> Random
+              </button>
+              <button 
                 onClick={() => { pushToHistory(new Set()); setLastActionPos(null); setTime(0); setTimerActive(false); }}
-                className="col-span-2 flex items-center justify-center p-3 border-2 border-min-ink text-min-ink hover:bg-min-ink/10 transition-all font-black text-[10px] uppercase tracking-widest shadow-sm"
+                className="w-[calc(50%-4px)] flex items-center justify-center p-3 border-2 border-min-ink text-min-ink hover:bg-min-ink/10 transition-all font-black text-[10px] uppercase tracking-widest shadow-sm"
               >
                 Wipe
               </button>
@@ -440,100 +851,39 @@ export default function App() {
             </div>
           </div>
           <div className="w-full flex items-center justify-center min-h-[300px] touch-auto">
-            <div 
-              style={{ 
-                gridTemplateColumns: `repeat(${n}, 1fr)`,
-                width: `min(850px, 95vw)`,
-                height: `min(850px, 95vw)`
-              }} 
-              className="grid border-2 border-current bg-min-bg shadow-2xl relative overflow-hidden transition-all duration-300"
-            >
-              {gridCells.map(({ r, cl }) => {
-                const isSelected = board.has(`${r},${cl}`);
-                const isViolation = violations.includes(`${r},${cl}`);
-                const isHint = hint?.pos === `${r},${cl}`;
-                const isLastCoin = lastActionPos === `${r},${cl}`;
-                const isCellHazard = isHazardous(r, cl);
-                const neighborCount = getNeighborCount(r, cl, n, board);
-                const excessCount = getExcessCount(r, cl, c, board);
-                const remainingCount = getRemainingCount(r, cl, c, board);
-                const dynamicFontSize = Math.min(64, Math.max(14, (600 / n) * 0.35));
-                
-                return (
-                  <button
+            <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
+              <div 
+                style={{ 
+                  gridTemplateColumns: `repeat(${n}, 1fr)`,
+                  width: `min(850px, 95vw)`,
+                  height: `min(850px, 95vw)`
+                }} 
+                className="grid border-2 border-current bg-min-bg shadow-2xl relative overflow-hidden transition-all duration-300"
+              >
+                {gridCells.map(({ r, cl }) => (
+                  <Cell 
                     key={`${r},${cl}`}
-                    onClick={() => { toggleCoin(r, cl); setHint(null); }}
-                    onMouseEnter={() => setHoveredPos(`${r},${cl}`)}
-                    onMouseLeave={() => setHoveredPos(null)}
-                    className="border border-current/10 flex items-center justify-center hover:bg-current/10 transition-colors relative h-full w-full overflow-hidden p-0 m-0 box-border group aspect-square"
-                  >
-                    {/* Hazard Overlay */}
-                    {isCellHazard && (
-                      <div className="absolute inset-0 bg-neutral-200/50 z-0 pointer-events-none" />
-                    )}
-                    {isSelected && (
-                      <motion.div 
-                        initial={{ scale: 0.8, opacity: 0 }} 
-                        animate={justSolved ? {
-                          filter: ['invert(0)', 'invert(1)', 'invert(0)', 'invert(1)', 'invert(0)', 'invert(1)', 'invert(0)'],
-                          scale: [1, 1.15, 1, 1.15, 1, 1.15, 1],
-                          opacity: 1
-                        } : { scale: 1, opacity: 1, filter: 'invert(0)' }}
-                        transition={justSolved ? { 
-                          duration: 3,
-                          ease: "easeInOut",
-                          times: [0, 0.15, 0.3, 0.5, 0.7, 0.85, 1]
-                        } : { duration: 0.15 }}
-                        className={`w-4/5 h-4/5 border-2 border-current rounded-full ${isViolation ? 'bg-min-bg' : 'bg-current'} transition-colors duration-300 flex items-center justify-center shadow-lg relative z-10 shrink-0 aspect-square`} 
-                      >
-                        {isSelected && !isViolation && showNeighbors && (
-                          <span 
-                            style={{ fontSize: `${dynamicFontSize}px` }}
-                            className="font-medium leading-none text-black pointer-events-none"
-                          >
-                            {neighborCount}
-                          </span>
-                        )}
-                        {isSelected && isViolation && showExcess && (
-                          <span 
-                            style={{ fontSize: `${dynamicFontSize}px` }}
-                            className="text-current font-medium leading-none pointer-events-none"
-                          >
-                            {excessCount}
-                          </span>
-                        )}
-                        {isHint && hint.type === 'remove' && (
-                          <motion.span 
-                            animate={{ opacity: [1, 0, 1], scale: [1, 1.2, 1] }}
-                            transition={{ repeat: Infinity, duration: 0.8 }}
-                            className="absolute inset-0 flex items-center justify-center text-neutral-900 font-black text-6xl drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] z-50 pointer-events-none"
-                          >
-                            ×
-                          </motion.span>
-                        )}
-                      </motion.div>
-                    )}
-                    {!isSelected && showRemaining && (
-                      <span 
-                        style={{ fontSize: `${dynamicFontSize}px` }}
-                        className="font-medium opacity-40 leading-none group-hover:opacity-80 transition-opacity pointer-events-none"
-                      >
-                        {remainingCount}
-                      </span>
-                    )}
-                    {!isSelected && isHint && hint.type === 'add' && (
-                      <motion.span 
-                        animate={{ opacity: [0, 1, 0.5], scale: [0.5, 1.2, 1] }}
-                        transition={{ duration: 0.5 }}
-                        className="absolute inset-0 flex items-center justify-center text-neutral-900 font-black text-7xl drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] pointer-events-none"
-                      >
-                        +
-                      </motion.span>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
+                    r={r}
+                    cl={cl}
+                    n={n}
+                    c={c}
+                    board={board}
+                    violations={violations}
+                    hint={hint}
+                    lastActionPos={lastActionPos}
+                    isHazardous={isHazardous}
+                    showNeighbors={showNeighbors}
+                    showExcess={showExcess}
+                    showRemaining={showRemaining}
+                    justSolved={justSolved}
+                    toggleCoin={toggleCoin}
+                    moveCoin={moveCoin}
+                    setHoveredPos={setHoveredPos}
+                    setHint={setHint}
+                  />
+                ))}
+              </div>
+            </DndContext>
           </div>
         </div>
       </div>
