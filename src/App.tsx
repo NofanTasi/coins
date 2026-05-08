@@ -18,7 +18,7 @@ import { restrictToWindowEdges } from '@dnd-kit/modifiers';
 import { 
   Minus, Plus, Maximize, RotateCcw, 
   Undo2, Redo2, Play, Pause, Square,
-  RefreshCcw, Dice5
+  RefreshCcw
 } from 'lucide-react';
 import { 
   BoardState, 
@@ -36,7 +36,6 @@ interface CellProps {
   c: number;
   board: BoardState;
   violations: string[];
-  hint: { type: 'add' | 'remove' | 'move'; pos?: string, from?: string, to?: string } | null;
   isHazardous: (r: number, cl: number) => boolean;
   showNeighbors: boolean;
   showExcess: boolean;
@@ -45,13 +44,12 @@ interface CellProps {
   toggleCoin: (r: number, cl: number) => void;
   moveCoin: (from: string, to: string) => void;
   setHoveredPos: (pos: string | null) => void;
-  setHint: (hint: any) => void;
 }
 
 const Cell: FC<CellProps> = ({ 
-  r, cl, n, c, board, violations, hint, isHazardous, 
+  r, cl, n, c, board, violations, isHazardous, 
   showNeighbors, showExcess, showRemaining, justSolved, 
-  toggleCoin, moveCoin, setHoveredPos, setHint 
+  toggleCoin, moveCoin, setHoveredPos 
 }) => {
   const pos = `${r},${cl}`;
   const isSelected = board.has(pos);
@@ -62,27 +60,6 @@ const Cell: FC<CellProps> = ({
   });
 
   const isViolation = violations.includes(pos);
-  const isHintAdd = hint?.type === 'add' && hint?.pos === pos;
-  const isHintRemove = hint?.type === 'remove' && hint?.pos === pos;
-  const isHintMoveFrom = hint?.type === 'move' && hint?.from === pos;
-  const isHintMoveTo = hint?.type === 'move' && hint?.to === pos;
-  
-  const handleHintClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (isHintAdd) {
-      toggleCoin(r, cl);
-      setHint(null);
-    } else if (isHintRemove) {
-      toggleCoin(r, cl);
-      setHint(null);
-    } else if (isHintMoveFrom || isHintMoveTo) {
-      // Execute the move immediately
-      if (hint?.from && hint?.to) {
-        moveCoin(hint.from, hint.to);
-        setHint(null);
-      }
-    }
-  };
   
   const isCellHazard = isHazardous(r, cl);
   const neighborCount = getNeighborCount(r, cl, n, board);
@@ -114,7 +91,7 @@ const Cell: FC<CellProps> = ({
           {...listeners}
           {...attributes}
           style={style}
-          onClick={(e) => { e.stopPropagation(); toggleCoin(r, cl); setHint(null); }}
+          onClick={(e) => { e.stopPropagation(); toggleCoin(r, cl); }}
           initial={{ scale: 0.8, opacity: 0 }}
           animate={justSolved ? {
             filter: ['invert(0)', 'invert(1)', 'invert(0)'],
@@ -144,28 +121,12 @@ const Cell: FC<CellProps> = ({
               {excessCount}
             </span>
           )}
-          
-          {/* Hint Overlay for removals */}
-          {(isHintRemove || isHintMoveFrom) && (
-            <div 
-              onClick={handleHintClick}
-              className="absolute inset-0 flex items-center justify-center z-50 cursor-pointer"
-            >
-              <motion.span 
-                animate={{ opacity: [1, 0, 1] }}
-                transition={{ repeat: Infinity, duration: 0.6, ease: "linear" }}
-                className="text-white font-bold text-6xl pointer-events-none drop-shadow-[0_0_2px_rgba(0,0,0,1)]"
-              >
-                ×
-              </motion.span>
-            </div>
-          )}
         </motion.div>
       )}
 
       {!isSelected && showRemaining && (
         <button 
-          onClick={() => { toggleCoin(r, cl); setHint(null); }}
+          onClick={() => { toggleCoin(r, cl); }}
           className="w-full h-full flex items-center justify-center"
         >
           <span 
@@ -177,25 +138,9 @@ const Cell: FC<CellProps> = ({
         </button>
       )}
 
-          {/* Hint Overlay for additions */}
-          {(isHintAdd || isHintMoveTo) && (
-            <div 
-              onClick={handleHintClick}
-              className="absolute inset-0 flex items-center justify-center z-50 cursor-pointer pointer-events-auto"
-            >
-              <motion.span 
-                animate={{ opacity: [1, 0.4, 1], scale: [1, 1.2, 1] }}
-                transition={{ repeat: Infinity, duration: 0.8, ease: "easeInOut" }}
-                className="text-current font-bold text-6xl pointer-events-none"
-              >
-                +
-              </motion.span>
-            </div>
-          )}
-
-      {!isSelected && !showRemaining && !isHintAdd && !isHintMoveTo && (
+      {!isSelected && !showRemaining && (
          <button 
-          onClick={() => { toggleCoin(r, cl); setHint(null); }}
+          onClick={() => { toggleCoin(r, cl); }}
           className="w-full h-full"
         />
       )}
@@ -226,7 +171,6 @@ export default function App() {
   const [showExcess, setShowExcess] = useState(false);
   const [showRemaining, setShowRemaining] = useState(false);
   const [isSolving, setIsSolving] = useState(false);
-  const [hint, setHint] = useState<{ type: 'add' | 'remove' | 'move'; pos?: string, from?: string, to?: string } | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const sensors = useSensors(
@@ -345,7 +289,6 @@ export default function App() {
   const handleSolve = () => {
     setIsSolving(true);
     setJustSolved(false);
-    setHint(null);
     setTimeout(() => {
       const solution = findSolution(n, c);
       if (solution) {
@@ -356,211 +299,6 @@ export default function App() {
       }
       setIsSolving(false);
     }, 50);
-  };
-
-  const handleHint = () => {
-    if (isSolving) return;
-
-    // Toggle: if hint is already active, clear it
-    if (hint) {
-      setHint(null);
-      return;
-    }
-
-    const currentSize = board.size;
-    const targetSize = n * c;
-
-    // Strategy 1: If we have too few coins, prioritize adding.
-    if (currentSize < targetSize) {
-      const allAdditions: { pos: string, rem: number }[] = [];
-      const rowCounts = new Array(n).fill(0);
-      board.forEach(key => {
-        const r = parseInt(key.split(',')[0]);
-        rowCounts[r]++;
-      });
-
-      // Find ALL empty spots across the board that can take a coin
-      for (let r = 0; r < n; r++) {
-        for (let cl = 0; cl < n; cl++) {
-          const pos = `${r},${cl}`;
-          if (!board.has(pos)) {
-            const rem = getRemainingCount(r, cl, c, board);
-            // We only consider additions that don't violate ANY constraint immediately (rem >= 1).
-            // However, we MUST prioritize rows that are under-full.
-            const isUnderRow = rowCounts[r] < c;
-            if (isUnderRow && rem >= 1) {
-              allAdditions.push({ pos, rem });
-            }
-          }
-        }
-      }
-
-      if (allAdditions.length > 0) {
-        // Sort by rem desc (most safe spot), then randomly among best
-        allAdditions.sort((a, b) => b.rem - a.rem);
-        const best = allAdditions.filter(a => a.rem === allAdditions[0].rem);
-        setHint({ type: 'add', pos: best[Math.floor(Math.random() * best.length)].pos });
-        return;
-      }
-
-      // If no "safe" spots found (rem >= 1), use solution-based addition
-      const solution = findSolution(n, c);
-      if (solution) {
-        const missing = [...solution].filter(key => !board.has(key));
-        if (missing.length > 0) {
-          // Double check: if we add a coin from solution, even if it violates, it's progress
-          setHint({ type: 'add', pos: missing[Math.floor(Math.random() * missing.length)] });
-          return;
-        }
-      }
-
-      // Final fallback: just add anywhere in an under-full row
-      for (let r = 0; r < n; r++) {
-        if (rowCounts[r] < c) {
-          for (let cl = 0; cl < n; cl++) {
-            if (!board.has(`${r},${cl}`)) {
-              setHint({ type: 'add', pos: `${r},${cl}` });
-              return;
-            }
-          }
-        }
-      }
-    }
-
-    // Strategy 2: If we have too many coins, prioritize removing.
-    if (currentSize > targetSize) {
-      const allRemovals: { pos: string, excess: number }[] = [];
-      const rowCounts = new Array(n).fill(0);
-      board.forEach(key => {
-        const r = parseInt(key.split(',')[0]);
-        rowCounts[r]++;
-      });
-
-      board.forEach((pos: string) => {
-        const [r, cl] = pos.split(',').map(Number);
-        // Prioritize coins in rows that are over-full, OR any coin with excess
-        if (rowCounts[r] > c || violations.includes(pos)) {
-          allRemovals.push({ pos, excess: getExcessCount(r, cl, c, board) });
-        }
-      });
-
-      if (allRemovals.length > 0) {
-        // Sort by excess desc (most problematic coin first)
-        allRemovals.sort((a, b) => b.excess - a.excess);
-        const maxExcess = allRemovals[0].excess;
-        const best = allRemovals.filter(r => r.excess === maxExcess);
-        setHint({ type: 'remove', pos: best[Math.floor(Math.random() * best.length)].pos });
-        return;
-      }
-    }
-
-    // Strategy 3: Correct count but not solved (must move).
-    if (currentSize === targetSize && !isSolved) {
-      // Prioritize moves that reduce total conflicts
-      const currentConflicts = violations.length;
-      
-      // Rank violation cells by their excess count before moving
-      const violationCells = Array.from(violations).map((pos: string) => {
-        const [r, cl] = pos.split(',').map(Number);
-        return { pos, excess: getExcessCount(r, cl, c, board) };
-      });
-      
-      // Sort by excess desc
-      violationCells.sort((a, b) => b.excess - a.excess);
-
-      const emptyCells: string[] = [];
-      for (let r = 0; r < n; r++) {
-        for (let cl = 0; cl < n; cl++) {
-          const p = `${r},${cl}`;
-          if (!board.has(p)) emptyCells.push(p);
-        }
-      }
-
-      for (const fromObj of violationCells) {
-        const from = fromObj.pos;
-        // Temporarily remove 'from' to evaluate remaining counts accurately
-        const tempBoard = new Set<string>(board);
-        tempBoard.delete(from);
-
-        // Try empty spots, prioritizing those that have positive remaining count AFTER subtraction
-        const candidates = emptyCells.map((to: string) => {
-          const [tr, tc] = to.split(',').map(Number);
-          return { to, rem: getRemainingCount(tr, tc, c, tempBoard) };
-        });
-
-        // 1. First try moves that reduce violations and maintain row/col/diag limits (rem >= 1)
-        for (const cand of candidates) {
-          if (cand.rem >= 1) {
-            const testBoard = new Set<string>(tempBoard);
-            testBoard.add(cand.to);
-            if (getViolations(c, testBoard).length < currentConflicts) {
-              setHint({ type: 'move', from, to: cand.to });
-              return;
-            }
-          }
-        }
-
-        // 2. Fallback: Any move that reduces total conflicts, even if it's still "dirty"
-        for (const cand of candidates) {
-          const testBoard = new Set<string>(tempBoard);
-          testBoard.add(cand.to);
-          if (getViolations(c, testBoard).length < currentConflicts) {
-            setHint({ type: 'move', from, to: cand.to });
-            return;
-          }
-        }
-      }
-
-      // Fallback: solution-based move
-      const solution = findSolution(n, c);
-      if (solution) {
-        const boardWithExcess = Array.from(board).map((pos: string) => {
-          const [r, cl] = pos.split(',').map(Number);
-          return { pos, excess: getExcessCount(r, cl, c, board), isCorrect: solution.has(pos) };
-        });
-        
-        // Prioritize removing the most "excessive" incorrect coin
-        boardWithExcess.sort((a, b) => b.excess - a.excess);
-        const fromPos = boardWithExcess.find(obj => !obj.isCorrect)?.pos;
-        const toPos = [...solution].find(pos => !board.has(pos));
-        
-        if (fromPos && toPos) {
-          setHint({ type: 'move', from: fromPos, to: toPos });
-          return;
-        }
-      }
-
-      // Final fallback: Any move within same row if possible
-      for (const fromObj of violationCells) {
-        const from = fromObj.pos;
-        const [fr] = from.split(',').map(Number);
-        for (const to of emptyCells) {
-          if (parseInt(to.split(',')[0]) === fr) {
-            setHint({ type: 'move', from, to });
-            return;
-          }
-        }
-      }
-    }
-  };
-
-  const handleRandomBoard = () => {
-    const newBoard = new Set<string>();
-    for (let r = 0; r < n; r++) {
-      const cols = Array.from({ length: n }, (_, i) => i);
-      // Shuffle cols
-      for (let i = cols.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [cols[i], cols[j]] = [cols[j], cols[i]];
-      }
-      // Pick first C columns
-      for (let i = 0; i < c; i++) {
-        newBoard.add(`${r},${cols[i]}`);
-      }
-    }
-    pushToHistory(newBoard);
-    setLastActionPos(null);
-    setHint(null);
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -575,7 +313,6 @@ export default function App() {
         newBoard.add(to);
         pushToHistory(newBoard);
         setLastActionPos(to);
-        setHint(null);
       }
     }
   };
@@ -609,7 +346,6 @@ export default function App() {
       setLastActionPos(key);
     }
     pushToHistory(newBoard);
-    setHint(null);
   }, [board, pushToHistory]);
 
   const moveCoin = useCallback((from: string, to: string) => {
@@ -619,7 +355,6 @@ export default function App() {
       newBoard.add(to);
       setLastActionPos(to);
       pushToHistory(newBoard);
-      setHint(null);
     }
   }, [board, pushToHistory]);
 
@@ -670,7 +405,7 @@ export default function App() {
             <div>
               <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-none mb-2 uppercase">COIN PLACEMENT</h1>
               <div className="flex items-center gap-3 opacity-40">
-                <span className="text-[10px] font-bold tracking-widest uppercase">Version 1.5.3</span>
+                <span className="text-[10px] font-bold tracking-widest uppercase">Version 1.6.0</span>
                 <button 
                   onClick={() => window.location.reload()}
                   className="flex items-center gap-1 hover:opacity-100 transition-opacity"
@@ -810,19 +545,6 @@ export default function App() {
                 {isSolving ? '...' : 'Solve'}
               </button>
               <button 
-                onClick={handleHint}
-                disabled={isSolved || isSolving}
-                className={`w-[calc(50%-4px)] flex items-center justify-center p-3 border-2 transition-all font-bold text-[10px] uppercase tracking-widest shadow-sm ${isSolved || isSolving ? 'opacity-20 cursor-not-allowed border-current/20' : 'border-current text-current hover:bg-current/10'}`}
-              >
-                Hint
-              </button>
-              <button 
-                onClick={handleRandomBoard}
-                className="w-[calc(50%-4px)] flex items-center justify-center gap-2 p-3 border-2 border-min-ink text-min-ink hover:bg-min-ink/10 transition-all font-bold text-[10px] uppercase tracking-widest shadow-sm"
-              >
-                <Dice5 size={12} /> Random
-              </button>
-              <button 
                 onClick={() => { pushToHistory(new Set()); setLastActionPos(null); setTime(0); setTimerActive(false); }}
                 className="w-[calc(50%-4px)] flex items-center justify-center p-3 border-2 border-min-ink text-min-ink hover:bg-min-ink/10 transition-all font-bold text-[10px] uppercase tracking-widest shadow-sm"
               >
@@ -869,8 +591,6 @@ export default function App() {
                     c={c}
                     board={board}
                     violations={violations}
-                    hint={hint}
-                    lastActionPos={lastActionPos}
                     isHazardous={isHazardous}
                     showNeighbors={showNeighbors}
                     showExcess={showExcess}
@@ -879,7 +599,6 @@ export default function App() {
                     toggleCoin={toggleCoin}
                     moveCoin={moveCoin}
                     setHoveredPos={setHoveredPos}
-                    setHint={setHint}
                   />
                 ))}
               </div>
