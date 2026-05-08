@@ -401,11 +401,11 @@ export default function App() {
         
         {/* Header & Controls Column */}
         <aside className="w-full max-w-2xl flex flex-col gap-8 shrink-0">
-          <header className="flex justify-between items-start">
-            <div>
-              <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-none mb-2 uppercase">COIN PLACEMENT</h1>
-              <div className="flex items-center gap-3 opacity-40">
-                <span className="text-[10px] font-bold tracking-widest uppercase">Version 1.6.0</span>
+          <header className="flex flex-col items-center justify-center text-center">
+            <div className="flex flex-col items-center">
+              <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-none mb-2 uppercase text-center">COIN PLACEMENT</h1>
+              <div className="flex items-center justify-center gap-3 opacity-40">
+                <span className="text-[10px] font-bold tracking-widest uppercase">Version 1.6.5</span>
                 <button 
                   onClick={() => window.location.reload()}
                   className="flex items-center gap-1 hover:opacity-100 transition-opacity"
@@ -418,76 +418,110 @@ export default function App() {
           </header>
 
           <section className="space-y-6 py-6 border-y-2 border-current">
-            <div className="flex items-center gap-4 w-full">
-              <span className="text-[10px] md:text-sm font-bold tracking-widest opacity-40 uppercase">Elapsed</span>
-              <span className="text-3xl md:text-4xl leading-none tabular-nums font-bold ml-auto">{formatTime(time)}</span>
-              <div className="flex gap-1 ml-4">
-                <button 
-                  onClick={() => setTimerActive(!timerActive)}
-                  className="p-2 border-2 border-current hover:bg-current hover:text-min-bg transition-colors"
-                >
-                  {timerActive ? <Pause size={16} /> : <Play size={16} />}
-                </button>
-                <button 
-                  onClick={() => { setTimerActive(false); setTime(0); }}
-                  className="p-2 border-2 border-current hover:bg-current hover:text-min-bg transition-colors"
-                >
-                  <Square size={16} />
-                </button>
-              </div>
-            </div>
-
             <div className="space-y-4">
-              <div className="flex flex-col items-center">
-                <span className="text-[10px] font-bold tracking-widest opacity-40 uppercase">Number</span>
-                <span className="text-3xl font-bold tabular-nums">{n}</span>
-              </div>
-              <input 
-                type="range" min="2" max="32" value={n} 
-                onChange={(e) => { 
-                  const val = parseInt(e.target.value);
-                  setN(val); 
-                  pushToHistory(new Set()); 
-                  setTime(0);
-                  setTimerActive(false);
-                }}
-                className="w-full h-8 cursor-pointer"
-              />
-            </div>
-
-            <div className="space-y-4">
-              <div className="flex flex-col items-center">
-                <span className="text-[10px] font-bold tracking-widest opacity-40 uppercase">Coins</span>
-                <span className="text-3xl font-bold tabular-nums">{c}</span>
-              </div>
-              <input 
-                type="range" min="1" max={n} value={c} 
-                onChange={(e) => { 
-                  const val = parseInt(e.target.value);
-                  setC(val); 
-                  pushToHistory(new Set());
-                  setTime(0);
-                  setTimerActive(false);
-                }}
-                className="w-full h-8 cursor-pointer"
-              />
-            </div>
-
-            <div className="space-y-4 pt-4">
-              <div className="flex justify-between items-end">
-                <span className="text-[10px] font-bold tracking-widest opacity-40 uppercase">Zoom</span>
-                <span className="text-sm font-bold tabular-nums">{Math.round(zoom * 100)}%</span>
+              <div className="flex items-center justify-center text-center">
+                <span className="text-xl font-bold tracking-tight uppercase">NUMBER : {n}</span>
               </div>
               <div className="flex items-center gap-4">
-                <Minus size={14} className="opacity-40" />
+                <button 
+                  onClick={() => { 
+                    const val = Math.max(2, n - 1);
+                    setN(val);
+                    if (c > val) setC(val);
+                    pushToHistory(new Set()); setTime(0); setTimerActive(false);
+                  }}
+                  className="p-2 border-2 border-current hover:bg-current hover:text-min-bg transition-colors"
+                >
+                  <Minus size={16} />
+                </button>
+                <input 
+                  type="range" min="2" max="32" value={n} 
+                  onChange={(e) => { 
+                    const val = parseInt(e.target.value);
+                    setN(val); 
+                    if (c > val) setC(val);
+                    pushToHistory(new Set()); 
+                    setTime(0);
+                    setTimerActive(false);
+                  }}
+                  className="w-full h-8 cursor-pointer"
+                />
+                <button 
+                  onClick={() => { 
+                    const val = Math.min(32, n + 1);
+                    setN(val); 
+                    pushToHistory(new Set()); setTime(0); setTimerActive(false);
+                  }}
+                  className="p-2 border-2 border-current hover:bg-current hover:text-min-bg transition-colors"
+                >
+                  <Plus size={16} />
+                </button>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex items-center justify-center text-center">
+                <span className="text-xl font-bold tracking-tight uppercase">COINS : {c}</span>
+              </div>
+              <div className="flex items-center gap-4">
+                <button 
+                  onClick={() => {
+                    const val = Math.max(1, c - 1);
+                    setC(val);
+                    pushToHistory(new Set()); setTime(0); setTimerActive(false);
+                  }}
+                  className="p-2 border-2 border-current hover:bg-current hover:text-min-bg transition-colors"
+                >
+                  <Minus size={16} />
+                </button>
+                <input 
+                  type="range" min="1" max={n} value={c} 
+                  onChange={(e) => { 
+                    const val = parseInt(e.target.value);
+                    setC(val); 
+                    pushToHistory(new Set());
+                    setTime(0);
+                    setTimerActive(false);
+                  }}
+                  className="w-full h-8 cursor-pointer"
+                />
+                <button 
+                  onClick={() => {
+                    const val = Math.min(n, c + 1);
+                    setC(val);
+                    pushToHistory(new Set()); setTime(0); setTimerActive(false);
+                  }}
+                  className="p-2 border-2 border-current hover:bg-current hover:text-min-bg transition-colors"
+                >
+                  <Plus size={16} />
+                </button>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex items-center justify-center gap-4 text-center">
+                <button onClick={fitToScreen} className="p-2 hover:bg-current/10 border-2 border-current transition-colors">
+                  <Maximize size={16} />
+                </button>
+                <span className="text-xl font-bold tracking-tight uppercase">ZOOM : {Math.round(zoom * 100)}%</span>
+              </div>
+              <div className="flex items-center gap-4">
+                <button 
+                  onClick={() => setZoom(Math.max(0.5, zoom - 0.1))}
+                  className="p-2 border-2 border-current hover:bg-current hover:text-min-bg transition-colors"
+                >
+                  <Minus size={16} />
+                </button>
                 <input 
                   type="range" min="0.5" max="3" step="0.1" value={zoom} 
                   onChange={(e) => setZoom(parseFloat(e.target.value))}
                   className="w-full h-8 cursor-pointer"
                 />
-                <Plus size={14} className="opacity-40" />
-                <button onClick={fitToScreen} className="p-2 hover:bg-current/10 border-2 border-current transition-colors ml-2">
-                  <Maximize size={16} />
+                <button 
+                  onClick={() => setZoom(Math.min(3, zoom + 0.1))}
+                  className="p-2 border-2 border-current hover:bg-current hover:text-min-bg transition-colors"
+                >
+                  <Plus size={16} />
                 </button>
               </div>
             </div>
@@ -496,41 +530,41 @@ export default function App() {
               <button 
                 onClick={undo}
                 disabled={historyIndex <= 0}
-                className="w-[calc(50%-4px)] flex items-center justify-center gap-2 p-3 border-2 border-current hover:bg-current hover:text-min-bg disabled:opacity-20 disabled:pointer-events-none transition-all font-bold text-[10px] uppercase tracking-widest"
+                className="w-[calc(50%-4px)] flex items-center justify-center gap-2 p-4 border-2 border-current hover:bg-current hover:text-min-bg disabled:opacity-20 disabled:pointer-events-none transition-all font-bold text-xl uppercase tracking-widest"
               >
-                <Undo2 size={12} /> Undo
+                <Undo2 size={20} /> Undo
               </button>
               <button 
                 onClick={redo}
                 disabled={historyIndex >= history.length - 1}
-                className="w-[calc(50%-4px)] flex items-center justify-center gap-2 p-3 border-2 border-current hover:bg-current hover:text-min-bg disabled:opacity-20 disabled:pointer-events-none transition-all font-bold text-[10px] uppercase tracking-widest"
+                className="w-[calc(50%-4px)] flex items-center justify-center gap-2 p-4 border-2 border-current hover:bg-current hover:text-min-bg disabled:opacity-20 disabled:pointer-events-none transition-all font-bold text-xl uppercase tracking-widest"
               >
-                Redo <Redo2 size={12} />
+                Redo <Redo2 size={20} />
               </button>
             </div>
 
             <div className="flex flex-wrap justify-center gap-2">
               <button 
                 onClick={() => setShowAllHazards(!showAllHazards)}
-                className={`w-[calc(50%-4px)] flex items-center justify-center p-3 border-2 transition-all font-bold text-[10px] uppercase tracking-widest ${showAllHazards ? 'bg-neutral-800 text-neutral-100 border-neutral-800 shadow-inner' : 'border-neutral-200 text-neutral-400 hover:bg-neutral-50 hover:text-neutral-600'}`}
+                className={`w-[calc(50%-4px)] flex items-center justify-center p-4 border-2 transition-all font-bold text-xl uppercase tracking-widest ${showAllHazards ? 'bg-neutral-800 text-neutral-100 border-neutral-800 shadow-inner' : 'border-neutral-200 text-neutral-400 hover:bg-neutral-50 hover:text-neutral-600'}`}
               >
                 Affect
               </button>
               <button 
                 onClick={() => setShowNeighbors(!showNeighbors)}
-                className={`w-[calc(50%-4px)] flex items-center justify-center p-3 border-2 transition-all font-bold text-[10px] uppercase tracking-widest ${showNeighbors ? 'bg-min-ink text-min-bg border-min-ink shadow-inner' : 'border-min-ink/30 text-min-ink hover:bg-min-ink/5'}`}
+                className={`w-[calc(50%-4px)] flex items-center justify-center p-4 border-2 transition-all font-bold text-xl uppercase tracking-widest ${showNeighbors ? 'bg-min-ink text-min-bg border-min-ink shadow-inner' : 'border-min-ink/30 text-min-ink hover:bg-min-ink/5'}`}
               >
                 Neighbors
               </button>
               <button 
                 onClick={() => setShowExcess(!showExcess)}
-                className={`w-[calc(50%-4px)] flex items-center justify-center p-3 border-2 transition-all font-bold text-[10px] uppercase tracking-widest ${showExcess ? 'bg-min-ink text-min-bg border-min-ink shadow-inner' : 'border-min-ink/30 text-min-ink hover:bg-min-ink/5'}`}
+                className={`w-[calc(50%-4px)] flex items-center justify-center p-4 border-2 transition-all font-bold text-xl uppercase tracking-widest ${showExcess ? 'bg-min-ink text-min-bg border-min-ink shadow-inner' : 'border-min-ink/30 text-min-ink hover:bg-min-ink/5'}`}
               >
                 Excess
               </button>
               <button 
                 onClick={() => setShowRemaining(!showRemaining)}
-                className={`w-[calc(50%-4px)] flex items-center justify-center p-3 border-2 transition-all font-bold text-[10px] uppercase tracking-widest ${showRemaining ? 'bg-min-ink text-min-bg border-min-ink shadow-inner' : 'border-min-ink/30 text-min-ink hover:bg-min-ink/5'}`}
+                className={`w-[calc(50%-4px)] flex items-center justify-center p-4 border-2 transition-all font-bold text-xl uppercase tracking-widest ${showRemaining ? 'bg-min-ink text-min-bg border-min-ink shadow-inner' : 'border-min-ink/30 text-min-ink hover:bg-min-ink/5'}`}
               >
                 Remaining
               </button>
@@ -540,13 +574,13 @@ export default function App() {
               <button 
                 disabled={isSolving}
                 onClick={handleSolve}
-                className={`w-[calc(50%-4px)] flex items-center justify-center p-3 border-2 transition-all font-bold text-[10px] uppercase tracking-widest shadow-sm ${isSolving ? 'opacity-50 cursor-wait bg-min-ink text-min-bg' : 'border-min-ink text-min-ink hover:bg-min-ink/10'}`}
+                className={`w-[calc(50%-4px)] flex items-center justify-center p-4 border-2 transition-all font-bold text-xl uppercase tracking-widest shadow-sm ${isSolving ? 'opacity-50 cursor-wait bg-min-ink text-min-bg' : 'border-min-ink text-min-ink hover:bg-min-ink/10'}`}
               >
                 {isSolving ? '...' : 'Solve'}
               </button>
               <button 
                 onClick={() => { pushToHistory(new Set()); setLastActionPos(null); setTime(0); setTimerActive(false); }}
-                className="w-[calc(50%-4px)] flex items-center justify-center p-3 border-2 border-min-ink text-min-ink hover:bg-min-ink/10 transition-all font-bold text-[10px] uppercase tracking-widest shadow-sm"
+                className="w-[calc(50%-4px)] flex items-center justify-center p-4 border-2 border-min-ink text-min-ink hover:bg-min-ink/10 transition-all font-bold text-xl uppercase tracking-widest shadow-sm"
               >
                 Wipe
               </button>
@@ -556,22 +590,6 @@ export default function App() {
 
         {/* Board Area */}
         <div className="w-full flex flex-col items-center">
-          <div className="w-full max-w-2xl px-4 mb-4">
-            <div className="grid grid-cols-3 gap-1 border-2 border-current bg-min-bg shadow-sm overflow-hidden">
-              <div className="flex flex-col items-center p-3 border-r-2 border-current last:border-r-0">
-                <span className="text-[10px] font-bold tracking-widest opacity-40 uppercase mb-1">Valid</span>
-                <span className="text-2xl font-bold tabular-nums">{board.size - violations.length}</span>
-              </div>
-              <div className="flex flex-col items-center p-3 border-r-2 border-current last:border-r-0 bg-current/5">
-                <span className="text-[10px] font-bold tracking-widest opacity-40 uppercase mb-1">Invalid</span>
-                <span className="text-2xl font-bold tabular-nums">{violations.length}</span>
-              </div>
-              <div className="flex flex-col items-center p-3 border-r-2 border-current last:border-r-0">
-                <span className="text-[10px] font-bold tracking-widest opacity-40 uppercase mb-1">Goal</span>
-                <span className="text-2xl font-bold tabular-nums">{n * c}</span>
-              </div>
-            </div>
-          </div>
           <div className="w-full flex items-center justify-center min-h-[300px] touch-auto">
             <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
               <div 
@@ -603,6 +621,37 @@ export default function App() {
                 ))}
               </div>
             </DndContext>
+          </div>
+
+          <div className="w-full max-w-2xl mt-12 pt-8 border-t-2 border-current">
+            <div className="grid grid-cols-3 gap-2 w-full mb-8">
+              <div className="flex items-center justify-center p-4 border-2 border-current font-bold text-xl uppercase tracking-widest bg-min-bg shadow-sm">
+                VALID : {board.size - violations.length}
+              </div>
+              <div className="flex items-center justify-center p-4 border-2 border-current font-bold text-xl uppercase tracking-widest bg-min-bg shadow-sm">
+                INVALID : {violations.length}
+              </div>
+              <div className="flex items-center justify-center p-4 border-2 border-current font-bold text-xl uppercase tracking-widest bg-min-bg shadow-sm">
+                GOAL : {n * c}
+              </div>
+            </div>
+            <div className="flex flex-col items-center gap-4 w-full text-center">
+              <span className="text-xl font-bold tracking-tight uppercase">ELAPSED : {formatTime(time)}</span>
+              <div className="flex gap-2 justify-center">
+                <button 
+                  onClick={() => setTimerActive(!timerActive)}
+                  className="p-2 border-2 border-current hover:bg-current hover:text-min-bg transition-colors"
+                >
+                  {timerActive ? <Pause size={16} /> : <Play size={16} />}
+                </button>
+                <button 
+                  onClick={() => { setTimerActive(false); setTime(0); }}
+                  className="p-2 border-2 border-current hover:bg-current hover:text-min-bg transition-colors"
+                >
+                  <Square size={16} />
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
