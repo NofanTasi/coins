@@ -265,7 +265,7 @@ export default function App() {
             <div>
               <h1 className="text-4xl md:text-6xl font-black tracking-tighter leading-none mb-2 uppercase">COIN PLACEMENT</h1>
               <div className="flex items-center gap-3 opacity-40">
-                <span className="text-[10px] font-black tracking-widest uppercase">Version 1.3.2</span>
+                <span className="text-[10px] font-black tracking-widest uppercase">Version 1.3.5</span>
                 <button 
                   onClick={() => window.location.reload()}
                   className="flex items-center gap-1 hover:opacity-100 transition-opacity"
@@ -423,6 +423,22 @@ export default function App() {
 
         {/* Board Area */}
         <div className="w-full flex flex-col items-center">
+          <div className="w-full max-w-2xl px-4 mb-4">
+            <div className="grid grid-cols-3 gap-1 border-2 border-current bg-min-bg shadow-sm overflow-hidden">
+              <div className="flex flex-col items-center p-3 border-r-2 border-current last:border-r-0">
+                <span className="text-[10px] font-black tracking-widest opacity-40 uppercase mb-1">Valid</span>
+                <span className="text-2xl font-black tabular-nums">{board.size - violations.length}</span>
+              </div>
+              <div className="flex flex-col items-center p-3 border-r-2 border-current last:border-r-0 bg-current/5">
+                <span className="text-[10px] font-black tracking-widest opacity-40 uppercase mb-1">Invalid</span>
+                <span className="text-2xl font-black tabular-nums">{violations.length}</span>
+              </div>
+              <div className="flex flex-col items-center p-3 border-r-2 border-current last:border-r-0">
+                <span className="text-[10px] font-black tracking-widest opacity-40 uppercase mb-1">Goal</span>
+                <span className="text-2xl font-black tabular-nums">{n * c}</span>
+              </div>
+            </div>
+          </div>
           <div className="w-full flex items-center justify-center min-h-[300px] touch-auto">
             <div 
               style={{ 
