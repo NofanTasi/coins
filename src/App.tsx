@@ -62,7 +62,7 @@ const Cell: FC<CellProps> = ({
   const isViolation = violations.includes(pos);
   
   const isCellHazard = isHazardous(r, cl);
-  const neighborCount = getNeighborCount(r, cl, n, board);
+  const neighborCount = getNeighborCount(r, cl, n, board, c);
   const excessCount = getExcessCount(r, cl, c, board);
   const remainingCount = getRemainingCount(r, cl, c, board);
   const dynamicFontSize = Math.min(64, Math.max(14, (600 / n) * 0.35));
@@ -405,7 +405,7 @@ export default function App() {
             <div className="flex flex-col items-center">
               <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-none mb-2 uppercase text-center">COIN PLACEMENT</h1>
               <div className="flex items-center justify-center gap-3 opacity-40">
-                <span className="text-[10px] font-bold tracking-widest uppercase">Version 1.6.7</span>
+                <span className="text-[10px] font-bold tracking-widest uppercase">Version 1.6.9</span>
                 <button 
                   onClick={() => window.location.reload()}
                   className="flex items-center gap-1 hover:opacity-100 transition-opacity"

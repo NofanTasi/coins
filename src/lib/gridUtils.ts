@@ -15,8 +15,20 @@ export const getNeighbors = (r: number, c: number, n: number): string[] => {
   return neighbors;
 };
 
-export const getNeighborCount = (r: number, cl: number, n: number, board: BoardState): number => {
-  return getNeighbors(r, cl, n).filter(pos => board.has(pos)).length;
+export const getNeighborCount = (r: number, cl: number, _n: number, board: BoardState, cLimit: number): number => {
+  const violationArray = getViolations(cLimit, board);
+  const violations = new Set(violationArray);
+  const validBoard = new Set([...board].filter(pos => !violations.has(pos)));
+  
+  const activeLines = getActiveLines(validBoard);
+  const isSelected = validBoard.has(`${r},${cl}`) ? 1 : 0;
+  
+  const rCount = activeLines.rows.get(r) || 0;
+  const cCount = activeLines.cols.get(cl) || 0;
+  const majCount = activeLines.majorDiags.get(r - cl) || 0;
+  const minCount = activeLines.minorDiags.get(r + cl) || 0;
+  
+  return (rCount + cCount + majCount + minCount) - (4 * isSelected);
 };
 
 export const getExcessCount = (r: number, cl: number, cLimit: number, board: BoardState): number => {
