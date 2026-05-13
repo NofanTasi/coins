@@ -1,178 +1,146 @@
 {- 
   GENERALIZED N-QUEENS SOLVER (Haskell Implementation)
   
-  PROBLEM:
-  Place exactly C coins in every row, every column, and every diagonal 
-  of an N x N grid. Standard N-Queens is the N=8, C=1 case.
-  
-  ALGORITHM: Min-Conflicts Local Search
-  1. Generate an initial state that satisfies the row constraint (exactly C coins per row).
-  2. While conflicts exist:
-     a. Pick a random row containing a violation.
-     b. Pick a random coin in that row.
-     c. Evaluate all possible moves for that coin within its row.
-     d. Move the coin to the column that results in the minimum total conflicts.
-  3. If no solution is found after M iterations, restart with a new random board.
+  Mimicking solver.jl exactly:
+  1. Initialization: Exactly C coins per row (Satisfying row constraint).
+  2. Local Search: Min-Conflicts heuristic to resolve column and diagonal collisions.
+  3. Incremental State: Track counts in Maps for O(1) conflict lookups.
 -}
 
 import System.Random
+import System.Environment (getArgs)
 import Data.Set (Set)
 import qualified Data.Set as Set
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
-import Control.Monad (foldM, replicateM)
-import Data.List (foldl', minimumBy)
-import Data.Ord (comparing)
-import System.Environment (getArgs)
+import Control.Monad (foldM, forM_)
+import Data.List (foldl')
+import Data.Time.Clock (getCurrentTime, diffUTCTime)
+import Text.Printf (printf)
 
--- | Represents a position on the board (row, column)
-type Pos = (Int, Int)
-
--- | State container for the board and its line occupation counts.
---   We avoid recalculating counts entirely every step by incremental updates.
+-- | Solver State
 data SolverState = SolverState {
-    board         :: Set Pos,        -- Set of occupied positions (r, cl)
-    colCounts     :: Map Int Int,    -- Mapping of column index to coin count
-    majDiagCounts :: Map Int Int,    -- Mapping of (r - cl) to coin count
-    minDiagCounts :: Map Int Int,    -- Mapping of (r + cl) to coin count
-    n             :: Int,            -- Board dimension N
-    c             :: Int             -- Target coins per line C
+    board         :: Set (Int, Int),
+    colCounts     :: Map Int Int,
+    majDiagCounts :: Map Int Int,
+    minDiagCounts :: Map Int Int,
+    n             :: Int,
+    c             :: Int
 } deriving (Show)
 
--- | Creates a new, empty solver state for a given board configuration.
+-- | Initial empty state
 emptyState :: Int -> Int -> SolverState
 emptyState nVal cVal = SolverState Set.empty Map.empty Map.empty Map.empty nVal cVal
 
--- | Increments or decrements count for the lines passing through a position.
---   A coin at (r, cl) affects its column and two diagonal IDs.
-updateCounts :: Pos -> Int -> SolverState -> SolverState
+-- | Update counts for line directions
+updateCounts :: (Int, Int) -> Int -> SolverState -> SolverState
 updateCounts (r, cl) delta state = state {
     colCounts     = Map.insertWith (+) cl delta (colCounts state),
     majDiagCounts = Map.insertWith (+) (r - cl) delta (majDiagCounts state),
     minDiagCounts = Map.insertWith (+) (r + cl) delta (minDiagCounts state)
 }
 
--- | Atomically adds a coin to the set and updates its line counts.
-addCoin :: Pos -> SolverState -> SolverState
+-- | Add coin to board
+addCoin :: (Int, Int) -> SolverState -> SolverState
 addCoin pos state = updateCounts pos 1 (state { board = Set.insert pos (board state) })
 
--- | Atomically removes a coin from the set and updates its line counts.
-removeCoin :: Pos -> SolverState -> SolverState
+-- | Remove coin from board
+removeCoin :: (Int, Int) -> SolverState -> SolverState
 removeCoin pos state = updateCounts pos (-1) (state { board = Set.delete pos (board state) })
 
--- | Core operation: Move a coin within its row to maintain the row constraint.
+-- | Move coin in row
 moveCoin :: Int -> Int -> Int -> SolverState -> SolverState
-moveCoin r oldCol newCol state = 
-    addCoin (r, newCol) $ removeCoin (r, oldCol) state
+moveCoin r oldCol newCol state = addCoin (r, newCol) $ removeCoin (r, oldCol) state
 
--- | Calculate total conflicts (over-limit counts) for a single cell.
---   A conflict is defined as the number of extra coins in a line beyond limit C.
-getConflicts :: Pos -> SolverState -> Int
+-- | Get conflict score for a position
+getConflicts :: (Int, Int) -> SolverState -> Int
 getConflicts (r, cl) state = 
-    let colVal = Map.findWithDefault 0 cl (colCounts state)
-        majVal = Map.findWithDefault 0 (r - cl) (majDiagCounts state)
-        minVal = Map.findWithDefault 0 (r + cl) (minDiagCounts state)
-        countLimit = c state
-        sumExcess v = if v > countLimit then v - countLimit else 0
-    in sumExcess colVal + sumExcess majVal + sumExcess minVal
+    let cc = Map.findWithDefault 0 cl (colCounts state)
+        mc = Map.findWithDefault 0 (r - cl) (majDiagCounts state)
+        nc = Map.findWithDefault 0 (r + cl) (minDiagCounts state)
+        limit = c state
+        excess v = if v > limit then v - limit else 0
+    in excess cc + excess mc + excess nc
 
--- | Sum of all line violations across the board.
---   Target is 0 conflicts.
+-- | Total conflicts across all lines
 getTotalConflicts :: SolverState -> Int
 getTotalConflicts state = 
-    let countLimit = c state
-        sumExcess m = sum [v - countLimit | v <- Map.elems m, v > countLimit]
-    in sumExcess (colCounts state) + 
-       sumExcess (majDiagCounts state) + 
-       sumExcess (minDiagCounts state)
+    let limit = c state
+        sumExcess m = sum [v - limit | v <- Map.elems m, v > limit]
+    in sumExcess (colCounts state) + sumExcess (majDiagCounts state) + sumExcess (minDiagCounts state)
 
--- | Simple Fisher-Yates implementation for random sampling
-fisherYates :: [a] -> IO [a]
-fisherYates xs = do
-    let len = length xs
-    let loop a i 
-            | i >= len - 1 = return a
-            | otherwise = do
-                j <- randomRIO (i, len - 1)
-                loop (swap a i j) (i + 1)
-    loop xs 0
-    where
-        swap l i j
-            | i == j    = l
-            | otherwise = 
-                let valI = l !! i
-                    valJ = l !! j
-                in replace l i valJ j valI
-        replace l i vI j vJ = 
-            let (before, atI:after) = splitAt i l
-                (mid, atJ:end)      = splitAt (j - i - 1) after
-            in before ++ [vI] ++ mid ++ [vJ] ++ end
+-- | Simple shuffle implementation
+shuffleList :: [a] -> IO [a]
+shuffleList [] = return []
+shuffleList xs = do
+    let nIdx = length xs
+    let loop [] _ = return []
+        loop l len = do
+            i <- randomRIO (0, len-1)
+            let (before, x:after) = splitAt i l
+            rest <- loop (before ++ after) (len - 1)
+            return (x:rest)
+    loop xs nIdx
 
--- | initialization: Start with Exactly C coins per row by placing coins 
---   in randomly selected columns for each row index.
+-- | Satisfy Row Constraint initially
 initialAssignment :: Int -> Int -> IO SolverState
 initialAssignment nVal cVal = do
-    let startState = emptyState nVal cVal
     foldM (\state r -> do
-        cols <- fisherYates [0..nVal-1]
+        cols <- shuffleList [1..nVal]
         let selected = take cVal cols
         return $ foldl' (\s cl -> addCoin (r, cl) s) state selected
-        ) startState [0..nVal-1]
+        ) (emptyState nVal cVal) [1..nVal]
 
--- | One step of local search: identify a potentially conflicting row and 
---   move one of its coins to the column that minimizes overall board tension.
-searchStep :: Int -> SolverState -> IO SolverState
-searchStep 0 state = return state -- Exhausted iterations
+-- | Search step
+searchStep :: Int -> SolverState -> IO (Maybe SolverState)
+searchStep 0 _ = return Nothing
 searchStep iterations state = do
     if getTotalConflicts state == 0 
-        then return state -- DONE!
+        then return (Just state)
         else do
-            -- Step 1: Choose a random row to improve
-            r <- randomRIO (0, n state - 1)
+            r <- randomRIO (1, n state)
+            let coinsInRow = [cl | cl <- [1..n state], Set.member (r, cl) (board state)]
+                emptyInRow = [cl | cl <- [1..n state], not $ Set.member (r, cl) (board state)]
             
-            -- Step 2: identify coins and empty slots in this row
-            let coinsInRow = [cl | cl <- [0..n state - 1], Set.member (r, cl) (board state)]
-                emptyInRow = [cl | cl <- [0..n state - 1], not (Set.member (r, cl) (board state))]
-            
-            -- Step 3: Pick a random coin to potentially relocate
-            cIdx <- randomRIO (0, length coinsInRow - 1)
-            let oldCol = coinsInRow !! cIdx
-            
-            -- Step 4: Find the set of columns in this row that minimize conflicts.
-            -- We track all tied "best" candidates to maintain randomness.
-            let findBest [] candidates _ = return candidates
-                findBest (newCol:rest) candidates minConf = do
-                    let testState = moveCoin r oldCol newCol state
-                        conf = getConflicts (r, newCol) testState
-                    if conf < minConf 
-                        then findBest rest [newCol] conf
-                        else if conf == minConf 
-                            then findBest rest (newCol:candidates) minConf
-                            else findBest rest candidates minConf
+            if null coinsInRow
+                then return Nothing
+                else do
+                    oldColIdx <- randomRIO (0, length coinsInRow - 1)
+                    let oldCol = coinsInRow !! oldColIdx
+                    
+                    -- Evaluate moves
+                    let evaluate [] bests minConf = return (bests, minConf)
+                        evaluate (newCol:rest) bests minConf = do
+                            let testState = moveCoin r oldCol newCol state
+                                conf = getConflicts (r, newCol) testState
+                            if conf < minConf 
+                                then evaluate rest [newCol] conf
+                                else if conf == minConf 
+                                    then evaluate rest (newCol:bests) minConf
+                                    else evaluate rest bests minConf
 
-            bestCandidates <- findBest emptyInRow [oldCol] (getConflicts (r, oldCol) state)
-            
-            -- Step 5: Commit to one of the best candidate columns
-            bIdx <- randomRIO (0, length bestCandidates - 1)
-            let targetCol = bestCandidates !! bIdx
-            
-            let nextState = if targetCol == oldCol then state else moveCoin r oldCol targetCol state
-            searchStep (iterations - 1) nextState
+                    (bestCols, _) <- evaluate emptyInRow [oldCol] (getConflicts (r, oldCol) state)
+                    
+                    targetIdx <- randomRIO (0, length bestCols - 1)
+                    let targetCol = bestCols !! targetIdx
+                    
+                    let nextState = if targetCol == oldCol then state else moveCoin r oldCol targetCol state
+                    searchStep (iterations - 1) nextState
 
--- | Master loop applying search with multiple restarts to escape local minima traps.
+-- | Main Solver with restarts
 solve :: Int -> Int -> Int -> IO (Maybe SolverState)
 solve nVal cVal restarts = do
     let maxIters = nVal * nVal * 100
-    let loop 0 = return Nothing -- Exceeded restarts
-        loop r = do
+    let loop 0 = return Nothing
+        loop i = do
             startState <- initialAssignment nVal cVal
             result <- searchStep maxIters startState
-            if getTotalConflicts result == 0 
-                then return (Just result)
-                else loop (r - 1)
+            case result of
+                Just s -> return (Just s)
+                Nothing -> loop (i - 1)
     loop restarts
 
--- | Main Execution Entry
+-- | Main Execution
 main :: IO ()
 main = do
     args <- getArgs
@@ -180,20 +148,20 @@ main = do
         (nStr:cStr:_) -> do
             let nV = read nStr
                 cV = read cStr
-            putStrLn $ "Finding solution for N=" ++ show nV ++ ", C=" ++ show cV ++ "..."
+            printf "Solving for size %d with %d coins (Min-Conflicts)...\n" nV cV
+            t1 <- getCurrentTime
             result <- solve nV cV 50
+            t2 <- getCurrentTime
             case result of
                 Just s -> do
-                    putStrLn "\n[SUCCESS] Solution found:"
+                    let diff = diffUTCTime t2 t1
+                    printf "\nSuccess! Found solution in %.2fms\n" (realToFrac diff * 1000 :: Double)
                     printBoard s
-                Nothing -> putStrLn "\n[FAILURE] No solution found within runtime limits."
+                Nothing -> putStrLn "\nFailed to find solution."
         _ -> putStrLn "Usage: runghc solver.hs <N> <C>"
 
--- | Renders the square board to the console using 'o' for coins and '.' for empty spaces.
+-- | Console output
 printBoard :: SolverState -> IO ()
-printBoard s = do
-    let nV = n s
-    mapM_ (\r -> do
-        let rowLine = [if Set.member (r, cl) (board s) then 'o' else '.' | cl <- [0..nV-1]]
-        putStrLn (unwords rowLine)
-        ) [0..nV-1]
+printBoard s = forM_ [1..n s] $ \r -> do
+    let line = unwords [if Set.member (r, cl) (board s) then "o" else "." | cl <- [1..n s]]
+    putStrLn line
